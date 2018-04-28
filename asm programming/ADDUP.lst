@@ -1,0 +1,191 @@
+Microsoft (R) Macro Assembler Version 6.11		    04/26/18 02:04:33
+tempfile.asm						     Page 1 - 1
+
+
+ 0000				DATAS SEGMENT
+ 0000 49 4E 50 55 54 20			STRING1 DB 'INPUT A NUM:',0DH,0AH,'$'
+       41 20 4E 55 4D 3A
+       0D 0A 24
+ 000F 45 52 52 31 3A 4F			STRING2 DB 'ERR1:OVERFLOW',0DH,0AH,'$'
+       56 45 52 46 4C 4F
+       57 0D 0A 24
+ 001F 45 52 52 32 3A 49			STRING3 DB 'ERR2:ILLEGAL INPUT',0DH,0AH,'$'
+       4C 4C 45 47 41 4C
+       20 49 4E 50 55 54
+       0D 0A 24
+ 0034 53 55 4D 3D 0D 0A			STRING4 DB 'SUM=',0DH,0AH,'$'
+       24
+ 003B 45 52 52 33 3A 4F			STRING5 DB 'ERR3:OVERFLOW',0DH,0AH,'$'
+       56 45 52 46 4C 4F
+       57 0D 0A 24
+ 004B 45 52 52 34 3A 4F			STRING6 DB 'ERR4:OVERFLOW',0DH,0AH,'$'
+       56 45 52 46 4C 4F
+       57 0D 0A 24
+ 005B 45 52 52 35 3A 4F			STRING7 DB 'ERR5:OVERFLOW',0DH,0AH,'$'
+       56 45 52 46 4C 4F
+       57 0D 0A 24
+ 006B 00			    NUM DB 00H
+ 006C 0000			    SUM DW 0000H;此处输入数据段代码  
+ 006E				DATAS ENDS
+
+ 0000				STACKS SEGMENT
+				    ;此处输入堆栈段代码
+ 0000				STACKS ENDS
+
+ 0000				CODES SEGMENT
+				    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+ 0000				START:
+ 0000  B8 ---- R		    MOV AX,DATAS
+ 0003  8E D8			    MOV DS,AX
+				    
+ 0005  8D 16 0000 R		    LEA DX,STRING1
+ 0009  B4 09			    MOV AH,9
+ 000B  CD 21			    INT 21H
+ 000D				IN1:    
+ 000D  B4 01			    MOV AH,01H
+ 000F  CD 21			    INT 21H
+ 0011  3C 0D			    CMP AL,13
+ 0013  74 22			    JZ OUT1
+				    
+ 0015  8A C8			    MOV CL,AL
+ 0017  8A 1E 006B R		    MOV BL,NUM
+ 001B  B0 0A			    MOV AL,10
+ 001D  F6 E3			    MUL BL
+				    
+				    ;CMP AH,0;OVERFLOW
+ 001F  70 57			    JO ERR1
+				    
+ 0021  80 F9 30			    CMP CL,'0';CHECK INPUT
+ 0024  72 5E			    JB ERR2
+ 0026  80 F9 39			    CMP CL,'9'
+ 0029  77 59			    JA ERR2
+ 002B  80 E9 30			    SUB CL,30H
+ 002E  12 C1			    ADC AL,CL  ;OVERFLOW
+ 0030  70 5E			    JO ERR3
+ 0032  A2 006B R		    MOV NUM,AL
+ 0035  EB D6			    JMP IN1               
+				    
+ 0037				OUT1:
+ 0037  B5 00				MOV CH,0
+ 0039  8A 0E 006B R			MOV CL,NUM
+ 003D  B8 0000				MOV AX,0
+ 0040				ADDUP:
+					
+ 0040  13 C1				ADC AX,CX;OVERFLOW
+ 0042  70 58				JO ERR4
+					
+ 0044  E2 FA				LOOP ADDUP
+
+ 0046  A3 006C R			MOV SUM,AX
+					
+ 0049  8D 16 0034 R			LEA DX,STRING4
+ 004D  B4 09				MOV AH,9
+ 004F  CD 21				INT 21H
+
+ 0051  BA 0000				MOV DX,0
+ 0054  A1 006C R			MOV AX,SUM
+ 0057  BB 000A				MOV BX,10
+ 005A  B9 0000				MOV CX,0
+ 005D				STACK1:	
+ 005D  41				INC CX
+ 005E  F7 F3				DIV BX
+ 0060  52				PUSH DX
+ 0061  83 F8 00				CMP AX,0
+ 0064  75 F7				JNZ STACK1
+ 0066				OUTPUT:
+ 0066  58				POP AX
+ 0067  8A D0				MOV DL,AL
+ 0069  80 C2 30				ADD DL,30H ;OVERFLOW
+ 006C  70 3A				JO ERR5
+					
+ 006E  B4 02				MOV AH,2
+ 0070  CD 21				INT 21H
+					
+ 0072  E2 F2				LOOP OUTPUT	
+ 0074  B4 4C				MOV AH,4CH
+ 0076  CD 21			    INT 21H
+
+ 0078				ERR1:	
+ 0078  8D 16 000F R			LEA DX,STRING2
+ 007C  B4 09				MOV AH,9
+ 007E  CD 21				INT 21H
+					
+ 0080  B4 4C				MOV AH,4CH
+ 0082  CD 21			    INT 21H
+ 0084				ERR2:
+ 0084  8D 16 001F R			LEA DX,STRING3
+ 0088  B4 09				MOV AH,9
+ 008A  CD 21				INT 21H
+				    ;此处输入代码段代码
+ 008C  B4 4C			    MOV AH,4CH
+ 008E  CD 21			    INT 21H
+				    
+ 0090				ERR3:	
+ 0090  8D 16 003B R			LEA DX,STRING5
+ 0094  B4 09				MOV AH,9
+ 0096  CD 21				INT 21H
+					
+ 0098  B4 4C				MOV AH,4CH
+ 009A  CD 21			    INT 21H
+ 009C				ERR4:	
+ 009C  8D 16 004B R			LEA DX,STRING6
+ 00A0  B4 09				MOV AH,9
+ 00A2  CD 21				INT 21H
+					
+ 00A4  B4 4C				MOV AH,4CH
+ 00A6  CD 21			    INT 21H
+ 00A8				ERR5:
+ 00A8  8D 16 005B R			LEA DX,STRING7
+ 00AC  B4 09				MOV AH,9
+ 00AE  CD 21				INT 21H
+					
+ 00B0  B4 4C				MOV AH,4CH
+ 00B2  CD 21			    INT 21H
+ 00B4				CODES ENDS
+				    END START
+
+
+
+
+Microsoft (R) Macro Assembler Version 6.11		    04/26/18 02:04:33
+tempfile.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+CODES  . . . . . . . . . . . . .	16 Bit	 00B4	  Para	  Private 
+DATAS  . . . . . . . . . . . . .	16 Bit	 006E	  Para	  Private 
+STACKS . . . . . . . . . . . . .	16 Bit	 0000	  Para	  Private 
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+ADDUP  . . . . . . . . . . . . .	L Near	 0040	  CODES	
+ERR1 . . . . . . . . . . . . . .	L Near	 0078	  CODES	
+ERR2 . . . . . . . . . . . . . .	L Near	 0084	  CODES	
+ERR3 . . . . . . . . . . . . . .	L Near	 0090	  CODES	
+ERR4 . . . . . . . . . . . . . .	L Near	 009C	  CODES	
+ERR5 . . . . . . . . . . . . . .	L Near	 00A8	  CODES	
+IN1  . . . . . . . . . . . . . .	L Near	 000D	  CODES	
+NUM  . . . . . . . . . . . . . .	Byte	 006B	  DATAS	
+OUT1 . . . . . . . . . . . . . .	L Near	 0037	  CODES	
+OUTPUT . . . . . . . . . . . . .	L Near	 0066	  CODES	
+STACK1 . . . . . . . . . . . . .	L Near	 005D	  CODES	
+START  . . . . . . . . . . . . .	L Near	 0000	  CODES	
+STRING1  . . . . . . . . . . . .	Byte	 0000	  DATAS	
+STRING2  . . . . . . . . . . . .	Byte	 000F	  DATAS	
+STRING3  . . . . . . . . . . . .	Byte	 001F	  DATAS	
+STRING4  . . . . . . . . . . . .	Byte	 0034	  DATAS	
+STRING5  . . . . . . . . . . . .	Byte	 003B	  DATAS	
+STRING6  . . . . . . . . . . . .	Byte	 004B	  DATAS	
+STRING7  . . . . . . . . . . . .	Byte	 005B	  DATAS	
+SUM  . . . . . . . . . . . . . .	Word	 006C	  DATAS	
+
+	   0 Warnings
+	   0 Errors

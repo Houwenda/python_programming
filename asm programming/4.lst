@@ -1,0 +1,94 @@
+Microsoft (R) Macro Assembler Version 6.11		    04/18/18 23:43:18
+tempfile.asm						     Page 1 - 1
+
+
+ 0000				DATAS SEGMENT
+ 0000 49 4E 50 55 54 20		    string1 db 'INPUT A STRING:',0dH,0aH
+       41 20 53 54 52 49
+       4E 47 3A 0D 0A
+ 0011 59 4F 55 52 20 53		    string2 db 'YOUR STRING IS:'
+       54 52 49 4E 47 20
+       49 53 3A
+ 0020 00			    string3 db ?;此处输入数据段代码  
+ 0021				DATAS ENDS
+
+ 0000				STACKS SEGMENT
+				    ;此处输入堆栈段代码
+ 0000				STACKS ENDS
+
+ 0000				CODES SEGMENT
+				    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+ 0000				START:
+ 0000  B8 ---- R		    MOV AX,DATAS
+ 0003  8E D8			    MOV DS,AX
+ 0005  BB 0000			    MOV BX,0
+				;输出   
+ 0008  B9 0011			    MOV CX,17
+ 000B  8A 97 0000 R		A:  MOV DL,string1[bx]
+ 000F  B4 02			    MOV AH,2
+ 0011  CD 21			    INT 21H
+ 0013  43			    INC BX
+ 0014  E2 F5			    LOOP A
+				    
+				;输入
+ 0016  BB 0000				MOV BX,0    
+ 0019  B4 01			B:  MOV AH,1
+ 001B  CD 21				INT 21H
+ 001D  3C 0D				CMP AL,13
+ 001F  74 07				JZ NEXT
+ 0021  88 87 0020 R			MOV string3[BX],AL
+ 0025  43				INC BX
+ 0026  EB F1				JMP B
+				;输出
+ 0028				NEXT:
+ 0028  B9 000F				MOV CX,0FH
+ 002B  BE 0000				MOV SI,0
+ 002E  8A 94 0011 R		A2:	MOV DL,string2[SI]
+ 0032  B4 02				MOV AH,2
+ 0034  CD 21				INT 21H
+ 0036  46				INC SI
+ 0037  E2 F5				LOOP A2
+					
+ 0039  8B CB				MOV CX,BX
+ 003B  BB 0000				MOV BX,0
+ 003E  8A 97 0020 R		E:	MOV DL,string3[BX]
+ 0042  B4 02				MOV AH,2
+ 0044  CD 21				INT 21H
+ 0046  43				INC BX
+ 0047  E2 F5				LOOP E
+					    ;此处输入代码段代码
+ 0049  B4 4C			    MOV AH,4CH
+ 004B  CD 21			    INT 21H
+ 004D				CODES ENDS
+				    END START
+Microsoft (R) Macro Assembler Version 6.11		    04/18/18 23:43:18
+tempfile.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+CODES  . . . . . . . . . . . . .	16 Bit	 004D	  Para	  Private 
+DATAS  . . . . . . . . . . . . .	16 Bit	 0021	  Para	  Private 
+STACKS . . . . . . . . . . . . .	16 Bit	 0000	  Para	  Private 
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+A2 . . . . . . . . . . . . . . .	L Near	 002E	  CODES	
+A  . . . . . . . . . . . . . . .	L Near	 000B	  CODES	
+B  . . . . . . . . . . . . . . .	L Near	 0019	  CODES	
+E  . . . . . . . . . . . . . . .	L Near	 003E	  CODES	
+NEXT . . . . . . . . . . . . . .	L Near	 0028	  CODES	
+START  . . . . . . . . . . . . .	L Near	 0000	  CODES	
+string1  . . . . . . . . . . . .	Byte	 0000	  DATAS	
+string2  . . . . . . . . . . . .	Byte	 0011	  DATAS	
+string3  . . . . . . . . . . . .	Byte	 0020	  DATAS	
+
+	   0 Warnings
+	   0 Errors

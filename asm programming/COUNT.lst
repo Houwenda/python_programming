@@ -1,0 +1,138 @@
+Microsoft (R) Macro Assembler Version 6.11		    04/26/18 01:52:34
+tempfile.asm						     Page 1 - 1
+
+
+ 0000				DATAS SEGMENT
+ 0000 49 4E 50 55 54 20		    STRING1 DB 'INPUT A STRING:',0DH,0AH,'$'
+       41 20 53 54 52 49
+       4E 47 3A 0D 0A 24
+				    ;STRING2 DB 'TEST',0DH,0AH,'$'
+
+ 0012 30			    COUNT1 DB 30H
+ 0013 30			    COUNT2 DB 30H
+ 0014 30			    COUNT3 DB 30H
+				    ;此处输入数据段代码  
+ 0015				DATAS ENDS
+
+ 0000				STACKS SEGMENT
+				    ;此处输入堆栈段代码
+ 0000				STACKS ENDS
+
+ 0000				CODES SEGMENT
+				    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+ 0000				START:
+ 0000  B8 ---- R		    MOV AX,DATAS
+ 0003  8E D8			    MOV DS,AX
+				    
+ 0005  8D 16 0000 R		  	LEA DX,STRING1
+ 0009  B4 09			  	MOV AH,9
+ 000B  CD 21			  	INT 21H
+ 000D  2A F6			  	SUB DH,DH
+				  	
+
+ 000F				IN1:  	
+ 000F  B4 01			    MOV AH,01H
+ 0011  CD 21			    INT 21H   
+ 0013  3C 0D			    CMP AL,13  
+ 0015  74 50			    JZ OUT1
+				    
+				;NUM    
+ 0017  3C 30			    CMP AL,30H
+ 0019  72 3E			    JB SYMBOL;fu hao 	
+ 001B  3C 39			 	CMP AL,39H
+ 001D  77 0E			    JA LETTER;fu hao he zi mu
+				          
+ 001F  8A 36 0012 R		    MOV DH,COUNT1[0]
+ 0023  FE C6			    INC DH
+ 0025  88 36 0012 R		    MOV COUNT1[0],DH
+ 0029  2A F6			    SUB DH,DH
+ 002B  EB E2			    JMP IN1
+				    
+				  
+				 
+				 
+ 002D				LETTER:
+ 002D  3C 41				CMP AL,41H
+ 002F  72 28			    JB SYMBOL;fu hao
+ 0031  3C 5A			    CMP AL,5aH
+ 0033  77 0E			    JA LETTER2;xiao zi mu he fu hao 
+ 0035  8A 36 0013 R		    MOV DH,COUNT2[0]
+ 0039  FE C6			    INC DH
+ 003B  88 36 0013 R		    MOV COUNT2[0],DH
+ 003F  2A F6			    SUB DH,DH
+ 0041  EB CC			    JMP IN1
+				   
+				            
+ 0043				LETTER2:
+ 0043  3C 61				CMP AL,61H
+ 0045  72 12				JB SYMBOL;fu hao
+ 0047  3C 7A				CMP AL,7AH
+ 0049  77 0E				JA SYMBOL;fu hao
+ 004B  8A 36 0013 R			MOV DH,COUNT2[0]
+ 004F  FE C6			    INC DH
+ 0051  88 36 0013 R		    MOV COUNT2[0],DH
+ 0055  2A F6			    SUB DH,DH 
+ 0057  EB B6			    JMP IN1
+				    
+
+				    
+ 0059				SYMBOL:
+ 0059  8A 36 0014 R			MOV DH,COUNT3[0]
+ 005D  FE C6				INC DH
+ 005F  88 36 0014 R			MOV COUNT3[0],DH
+ 0063  2A F6				SUB DH,DH
+ 0065  EB A8				JMP IN1
+				    
+
+					
+ 0067				OUT1:
+ 0067  8A 16 0012 R			MOV DL,COUNT1	
+ 006B  B4 02				MOV AH,02H 
+ 006D  CD 21				INT 21H   
+					
+ 006F  8A 16 0013 R			MOV DL,COUNT2	
+ 0073  B4 02				MOV AH,02H 
+ 0075  CD 21				INT 21H 
+					
+ 0077  8A 16 0014 R			MOV DL,COUNT3	
+ 007B  B4 02				MOV AH,02H 
+ 007D  CD 21				INT 21H 
+				    ;此处输入代码段代码
+ 007F  B4 4C			    MOV AH,4CH
+ 0081  CD 21			    INT 21H
+ 0083				CODES ENDS
+				    END START
+
+
+Microsoft (R) Macro Assembler Version 6.11		    04/26/18 01:52:34
+tempfile.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+CODES  . . . . . . . . . . . . .	16 Bit	 0083	  Para	  Private 
+DATAS  . . . . . . . . . . . . .	16 Bit	 0015	  Para	  Private 
+STACKS . . . . . . . . . . . . .	16 Bit	 0000	  Para	  Private 
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+COUNT1 . . . . . . . . . . . . .	Byte	 0012	  DATAS	
+COUNT2 . . . . . . . . . . . . .	Byte	 0013	  DATAS	
+COUNT3 . . . . . . . . . . . . .	Byte	 0014	  DATAS	
+IN1  . . . . . . . . . . . . . .	L Near	 000F	  CODES	
+LETTER2  . . . . . . . . . . . .	L Near	 0043	  CODES	
+LETTER . . . . . . . . . . . . .	L Near	 002D	  CODES	
+OUT1 . . . . . . . . . . . . . .	L Near	 0067	  CODES	
+START  . . . . . . . . . . . . .	L Near	 0000	  CODES	
+STRING1  . . . . . . . . . . . .	Byte	 0000	  DATAS	
+SYMBOL . . . . . . . . . . . . .	L Near	 0059	  CODES	
+
+	   0 Warnings
+	   0 Errors

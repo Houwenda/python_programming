@@ -1,0 +1,100 @@
+DATAS SEGMENT
+    STRING1 DB 'INPUT A STRING:',0DH,0AH,'$'
+    ;STRING2 DB 'TEST',0DH,0AH,'$'
+
+    COUNT1 DB 30H
+    COUNT2 DB 30H
+    COUNT3 DB 30H
+    ;此处输入数据段代码  
+DATAS ENDS
+
+STACKS SEGMENT
+    ;此处输入堆栈段代码
+STACKS ENDS
+
+CODES SEGMENT
+    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+START:
+    MOV AX,DATAS
+    MOV DS,AX
+    
+  	LEA DX,STRING1
+  	MOV AH,9
+  	INT 21H
+  	SUB DH,DH
+  	
+
+IN1:  	
+    MOV AH,01H
+    INT 21H   
+    CMP AL,13  
+    JZ OUT1
+    
+;NUM    
+    CMP AL,30H
+    JB SYMBOL;fu hao 	
+ 	CMP AL,39H
+    JA LETTER;fu hao he zi mu
+          
+    MOV DH,COUNT1[0]
+    INC DH
+    MOV COUNT1[0],DH
+    SUB DH,DH
+    JMP IN1
+    
+  
+ 
+ 
+LETTER:
+	CMP AL,41H
+    JB SYMBOL;fu hao
+    CMP AL,5aH
+    JA LETTER2;xiao zi mu he fu hao 
+    MOV DH,COUNT2[0]
+    INC DH
+    MOV COUNT2[0],DH
+    SUB DH,DH
+    JMP IN1
+   
+            
+LETTER2:
+	CMP AL,61H
+	JB SYMBOL;fu hao
+	CMP AL,7AH
+	JA SYMBOL;fu hao
+	MOV DH,COUNT2[0]
+    INC DH
+    MOV COUNT2[0],DH
+    SUB DH,DH 
+    JMP IN1
+    
+
+    
+SYMBOL:
+	MOV DH,COUNT3[0]
+	INC DH
+	MOV COUNT3[0],DH
+	SUB DH,DH
+	JMP IN1
+    
+
+	
+OUT1:
+	MOV DL,COUNT1	
+	MOV AH,02H 
+	INT 21H   
+	
+	MOV DL,COUNT2	
+	MOV AH,02H 
+	INT 21H 
+	
+	MOV DL,COUNT3	
+	MOV AH,02H 
+	INT 21H 
+    ;此处输入代码段代码
+    MOV AH,4CH
+    INT 21H
+CODES ENDS
+    END START
+
+
