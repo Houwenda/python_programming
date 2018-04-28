@@ -4,7 +4,7 @@ import thread
 import time
 from subprocess import Popen,PIPE
 def ip_check(ip):
-    check = Popen(['cmd.exe','-c','ping -c 2'+ip],stdin=PIPE,stdout=PIPE)
+    check = Popen(['cmd.exe','ping -n 2'+ip],stdin=PIPE,stdout=PIPE)
     data = check.stdout.read()
     if 'ttl' in data:
         print '%s is up'%ip
