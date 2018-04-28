@@ -15,8 +15,5 @@ def main():
         thread.start_new_thread(ip_check, (ip,))
         time.sleep(0.1)
 
-
-
-
 if __name__ == '__main__':
     main()
