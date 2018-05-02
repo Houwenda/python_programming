@@ -1,13 +1,17 @@
-Microsoft (R) Macro Assembler Version 6.11		    05/03/18 02:08:42
+Microsoft (R) Macro Assembler Version 6.11		    05/03/18 02:32:44
 tempfile.asm						     Page 1 - 1
 
 
  0000				DATAS SEGMENT
  0000 45 52 52 4F 52 0D			STRING1 DB 'ERROR',0dh,0ah,'$'
        0A 24
- 0008 0000			    NUM DW 0
- 000A 0000			    SUM DW 0;此处输入数据段代码  
- 000C				DATAS ENDS
+ 0008 4E 55 4D 3D 24			STRING2 DB 'NUM=$'
+ 000D 53 55 4D 3D 24			STRING3 DB 'SUM=$'
+ 0012 4F 56 45 52 46 4C			STRING4 DB 'OVERFLOW$'
+       4F 57 24
+ 001B 0000			    NUM DW 0
+ 001D 0000			    SUM DW 0;此处输入数据段代码  
+ 001F				DATAS ENDS
 
  0000				STACKS SEGMENT
 				    ;此处输入堆栈段代码
@@ -19,85 +23,101 @@ tempfile.asm						     Page 1 - 1
  0000  B8 ---- R		    MOV AX,DATAS
  0003  8E D8			    MOV DS,AX
 				    
- 0005				INPUT:  
+ 0005  8D 16 0008 R		    LEA DX,STRING2
+ 0009  B4 09				MOV AH,9
+ 000B  CD 21				INT 21H
+				    
+ 000D				INPUT:  
 				 
- 0005  B4 01			    MOV AH,01H;输入
- 0007  CD 21			    INT 21H
+ 000D  B4 01			    MOV AH,01H;输入
+ 000F  CD 21			    INT 21H
 				   
- 0009  3C 0D			    CMP AL,13;判断回车
- 000B  74 1E			    JZ STEP2
+ 0011  3C 0D			    CMP AL,13;判断回车
+ 0013  74 1E			    JZ STEP2
 				    
- 000D  3C 30			    CMP AL,'0';判断合法输入
- 000F  72 4C			    JB ERR1
- 0011  3C 39			    CMP AL,'9'
- 0013  77 48			    JA ERR1
- 0015  2C 30			    SUB AL,'0';字符转换为数字
- 0017  B4 00			    MOV AH,0;
- 0019  50			    PUSH AX;暂时空出AX
+ 0015  3C 30			    CMP AL,'0';判断合法输入
+ 0017  72 56			    JB ERR1
+ 0019  3C 39			    CMP AL,'9'
+ 001B  77 52			    JA ERR1
+ 001D  2C 30			    SUB AL,'0';字符转换为数字
+ 001F  B4 00			    MOV AH,0;
+ 0021  50			    PUSH AX;暂时空出AX
 				    
- 001A  A1 0008 R		    MOV AX,NUM
+ 0022  A1 001B R		    MOV AX,NUM
 				    
- 001D  BB 000A			    MOV BX,10;乘数放入bx
- 0020  F7 E3			    MUL BX;把num乘BX(10)存入AX
- 0022  5A			    POP DX;把输入的数字放入DX
- 0023  03 D0			    ADD DX,AX;实现输入多位数
- 0025  89 16 0008 R		    MOV NUM,DX;把得到的多位数放入data段
+ 0025  BB 000A			    MOV BX,10;乘数放入bx
+ 0028  F7 E3			    MUL BX;把num乘BX(10)存入AX
+ 002A  5A			    POP DX;把输入的数字放入DX
+ 002B  03 D0			    ADD DX,AX;实现输入多位数
+ 002D  89 16 001B R		    MOV NUM,DX;把得到的多位数放入data段
 				    
- 0029  EB DA			    JMP INPUT
+ 0031  EB DA			    JMP INPUT
 				    
- 002B				STEP2:
+ 0033				STEP2:
 					
- 002B  A1 000A R			MOV AX,SUM;0
- 002E  8B 16 0008 R			MOV DX,NUM
+ 0033  A1 001D R			MOV AX,SUM;0
+ 0036  8B 16 001B R			MOV DX,NUM
 
- 0032				ADDUP:
+ 003A				ADDUP:
 					
- 0032  03 C2				ADD AX,DX;累加
- 0034  4A				DEC DX;NUM减1
- 0035  83 FA 00				CMP DX,0
- 0038  75 F8				JNZ ADDUP;从输入值一直加到0
+ 003A  03 C2				ADD AX,DX;累加
+ 003C  70 3D				JO ERR2
+ 003E  4A				DEC DX;NUM减1
+ 003F  83 FA 00				CMP DX,0
+ 0042  75 F6				JNZ ADDUP;从输入值一直加到0
 				    
- 003A  A3 000A R			MOV SUM,AX;将累加得到的数放回data段
- 003D  B9 0000				MOV CX,0;用cx计数按位输出的次数，所以此处将cx清零
- 0040  BB 000A				MOV BX,10;为div设定除数
+ 0044  A3 001D R			MOV SUM,AX;将累加得到的数放回data段
+ 0047  B9 0000				MOV CX,0;用cx计数按位输出的次数，所以此处将cx清零
+ 004A  BB 000A				MOV BX,10;为div设定除数
 					
- 0043				STEP3:	
+ 004D				STEP3:	
 
- 0043  BA 0000				MOV DX,0;div将dx ax连接成的双字数据除以bx,所以此处将dx清零
- 0046  F7 F3				DIV BX;商送入ax 余数送入dx
-					
- 0048  52			    PUSH DX;余数送入stack段
- 0049  41			    INC CX;输出所用的次数加一
- 004A  83 F8 00			    CMP AX,0;
- 004D  75 F4			    JNZ STEP3;商不为0时继续短除
+ 004D  BA 0000				MOV DX,0;div将dx ax连接成的双字数据除以bx,所以此处将dx清零
+ 0050  F7 F3				DIV BX;商送入ax 余数送入dx	        
+ 0052  52			    PUSH DX;余数送入stack段
+ 0053  41			    INC CX;输出所用的次数加一
+ 0054  83 F8 00			    CMP AX,0;
+ 0057  75 F4			    JNZ STEP3;商不为0时继续短除   
+				    
+ 0059  8D 16 000D R			LEA DX,STRING3
+ 005D  B4 09				MOV AH,9
+ 005F  CD 21				INT 21H
 
- 004F				OUTPUT:
+ 0061				OUTPUT:
 				    
- 004F  5A			    POP DX;将后放入stack段的一个数拿出 放入dx
- 0050  83 C2 30			    ADD DX,'0';将数值转化为字符放入dx
+ 0061  5A			    POP DX;将后放入stack段的一个数拿出 放入dx
+ 0062  83 C2 30			    ADD DX,'0';将数值转化为字符放入dx
 				    
- 0053  B4 02			    MOV AH,2
- 0055  CD 21			    INT 21H;输出dl中ASCII对应的字符
+ 0065  B4 02			    MOV AH,2
+ 0067  CD 21			    INT 21H;输出dl中ASCII对应的字符
 				    
- 0057  E2 F6			    LOOP OUTPUT;CX递减到0时停止
+ 0069  E2 F6			    LOOP OUTPUT;CX递减到0时停止
 				    
- 0059  B4 4C			    MOV AH,4CH
- 005B  CD 21			    INT 21H  
+ 006B  B4 4C			    MOV AH,4CH
+ 006D  CD 21			    INT 21H  
 				    
- 005D				ERR1:
- 005D  8D 16 0000 R			LEA DX,STRING1
- 0061  B4 09				MOV AH,9
- 0063  CD 21				INT 21H
+ 006F				ERR1:
+ 006F  8D 16 0000 R			LEA DX,STRING1
+ 0073  B4 09				MOV AH,9
+ 0075  CD 21				INT 21H
 				    ;此处输入代码段代码
- 0065  B4 4C			    MOV AH,4CH
- 0067  CD 21			    INT 21H
- 0069				CODES ENDS
+ 0077  B4 4C			    MOV AH,4CH
+ 0079  CD 21			    INT 21H
+				    
+ 007B				ERR2:
+ 007B  8D 16 0012 R			LEA DX,STRING4
+ 007F  B4 09				MOV AH,9
+ 0081  CD 21				INT 21H
+ 0083  B4 4C			    MOV AH,4CH
+ 0085  CD 21			    INT 21H
+				        
+ 0087				CODES ENDS
 				    END START
 
 
 
 
-Microsoft (R) Macro Assembler Version 6.11		    05/03/18 02:08:42
+Microsoft (R) Macro Assembler Version 6.11		    05/03/18 02:32:44
 tempfile.asm						     Symbols 2 - 1
 
 
@@ -107,8 +127,8 @@ Segments and Groups:
 
                 N a m e                 Size     Length   Align   Combine Class
 
-CODES  . . . . . . . . . . . . .	16 Bit	 0069	  Para	  Private 
-DATAS  . . . . . . . . . . . . .	16 Bit	 000C	  Para	  Private 
+CODES  . . . . . . . . . . . . .	16 Bit	 0087	  Para	  Private 
+DATAS  . . . . . . . . . . . . .	16 Bit	 001F	  Para	  Private 
 STACKS . . . . . . . . . . . . .	16 Bit	 0000	  Para	  Private 
 
 
@@ -116,16 +136,20 @@ Symbols:
 
                 N a m e                 Type     Value    Attr
 
-ADDUP  . . . . . . . . . . . . .	L Near	 0032	  CODES	
-ERR1 . . . . . . . . . . . . . .	L Near	 005D	  CODES	
-INPUT  . . . . . . . . . . . . .	L Near	 0005	  CODES	
-NUM  . . . . . . . . . . . . . .	Word	 0008	  DATAS	
-OUTPUT . . . . . . . . . . . . .	L Near	 004F	  CODES	
+ADDUP  . . . . . . . . . . . . .	L Near	 003A	  CODES	
+ERR1 . . . . . . . . . . . . . .	L Near	 006F	  CODES	
+ERR2 . . . . . . . . . . . . . .	L Near	 007B	  CODES	
+INPUT  . . . . . . . . . . . . .	L Near	 000D	  CODES	
+NUM  . . . . . . . . . . . . . .	Word	 001B	  DATAS	
+OUTPUT . . . . . . . . . . . . .	L Near	 0061	  CODES	
 START  . . . . . . . . . . . . .	L Near	 0000	  CODES	
-STEP2  . . . . . . . . . . . . .	L Near	 002B	  CODES	
-STEP3  . . . . . . . . . . . . .	L Near	 0043	  CODES	
+STEP2  . . . . . . . . . . . . .	L Near	 0033	  CODES	
+STEP3  . . . . . . . . . . . . .	L Near	 004D	  CODES	
 STRING1  . . . . . . . . . . . .	Byte	 0000	  DATAS	
-SUM  . . . . . . . . . . . . . .	Word	 000A	  DATAS	
+STRING2  . . . . . . . . . . . .	Byte	 0008	  DATAS	
+STRING3  . . . . . . . . . . . .	Byte	 000D	  DATAS	
+STRING4  . . . . . . . . . . . .	Byte	 0012	  DATAS	
+SUM  . . . . . . . . . . . . . .	Word	 001D	  DATAS	
 
 	   0 Warnings
 	   0 Errors

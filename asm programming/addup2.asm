@@ -1,5 +1,8 @@
 DATAS SEGMENT
 	STRING1 DB 'ERROR',0dh,0ah,'$'
+	STRING2 DB 'NUM=$'
+	STRING3 DB 'SUM=$'
+	STRING4 DB 'OVERFLOW$'
     NUM DW 0
     SUM DW 0;此处输入数据段代码  
 DATAS ENDS
@@ -13,6 +16,10 @@ CODES SEGMENT
 START:
     MOV AX,DATAS
     MOV DS,AX
+    
+    LEA DX,STRING2
+	MOV AH,9
+	INT 21H
     
 INPUT:  
  
@@ -48,6 +55,7 @@ STEP2:
 ADDUP:
 	
 	ADD AX,DX;累加
+	JO ERR2
 	DEC DX;NUM减1
 	CMP DX,0
 	JNZ ADDUP;从输入值一直加到0
@@ -59,12 +67,15 @@ ADDUP:
 STEP3:	
 
 	MOV DX,0;div将dx ax连接成的双字数据除以bx,所以此处将dx清零
-	DIV BX;商送入ax 余数送入dx
-	
+	DIV BX;商送入ax 余数送入dx	        
     PUSH DX;余数送入stack段
     INC CX;输出所用的次数加一
     CMP AX,0;
-    JNZ STEP3;商不为0时继续短除
+    JNZ STEP3;商不为0时继续短除   
+    
+	LEA DX,STRING3
+	MOV AH,9
+	INT 21H
 
 OUTPUT:
     
@@ -86,9 +97,16 @@ ERR1:
     ;此处输入代码段代码
     MOV AH,4CH
     INT 21H
+    
+ERR2:
+	LEA DX,STRING4
+	MOV AH,9
+	INT 21H
+    MOV AH,4CH
+    INT 21H
+        
 CODES ENDS
     END START
-
 
 
 
