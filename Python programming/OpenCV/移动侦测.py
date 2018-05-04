@@ -51,6 +51,6 @@ while True:
     # 按'q'健退出循环
     if key == ord('q'):
         break
-# When everything done, release the capture
+# 释放存储
 camera.release()
 cv2.destroyAllWindows()
