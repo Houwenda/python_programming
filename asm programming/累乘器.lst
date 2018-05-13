@@ -1,0 +1,188 @@
+Microsoft (R) Macro Assembler Version 6.11		    05/14/18 01:25:01
+tempfile.asm						     Page 1 - 1
+
+
+ 0000				DATAS SEGMENT
+ 0000 0D 0A 45 52 52 4F			STRING1 DB 0DH,0AH,"ERROR$"
+       52 24
+ 0008 0000			    NUM DW 0
+ 000A 0000			    RESULTH DW 0
+ 000C 0000			    RESULTL DW 0
+ 000E 0000			    COUNT DW 0
+				    ;此处输入数据段代码  
+ 0010				DATAS ENDS
+
+ 0000				STACKS SEGMENT
+				    ;此处输入堆栈段代码
+ 0000				STACKS ENDS
+
+ 0000				CODES SEGMENT
+				    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+ 0000				START:
+ 0000  B8 ---- R		    MOV AX,DATAS
+ 0003  8E D8			    MOV DS,AX
+				    
+ 0005				INPUT:   
+
+ 0005  B4 01			    MOV AH,01H;输入
+ 0007  CD 21			    INT 21H
+				    
+ 0009  3C 0D			    CMP AL,13;ENTER则进入下一步
+ 000B  74 22			    JZ STEP2
+				    
+ 000D  3C 30			    CMP AL,'0';判断合法性
+ 000F  73 03 E9 0095		    JB ERR1
+ 0014  3C 39			    CMP AL,'9'
+ 0016  76 03 E9 008E		    JA ERR1
+				    
+ 001B  B4 00			    MOV AH,0;
+ 001D  50			    PUSH AX;暂时空出AX
+				    
+ 001E  A1 0008 R		    MOV AX,NUM
+				    
+ 0021  BB 000A			    MOV BX,10;乘数放入bx
+ 0024  F7 E3			    MUL BX;把num乘BX(10)存入AX
+ 0026  5A			    POP DX;把输入的数字放入DX
+ 0027  03 D0			    ADD DX,AX;实现输入多位数
+ 0029  89 16 0008 R		    MOV NUM,DX;把得到的多位数放入data段    
+				    
+ 002D  EB D6			    JMP INPUT
+				    
+ 002F				STEP2:
+					
+ 002F  A1 0008 R			MOV AX,NUM;用ax传值
+ 0032  E8 0048				CALL MULDW;调用子程序
+
+ 0035				STEP3:  ;转化为十进制放入堆栈段
+					
+ 0035  B9 000A				MOV CX,10;存放除数
+ 0038  8B 16 000A R			MOV DX,RESULTH
+ 003C  A1 000C R			MOV AX,RESULTL
+ 003F  50				PUSH AX;保存低16位
+ 0040  8B C2				MOV AX,DX;高16位放入ax
+ 0042  BA 0000				MOV DX,0;DIV将dx ax连接的双字除以源操作数，所以此处dx清零	
+ 0045  F7 F1				DIV CX;商放入ax 余数放入dx	
+ 0047  8B D8				MOV BX,AX;商放入bx
+ 0049  58				POP AX;拿出低16位
+ 004A  F7 F1				DIV CX;商放入ax 余数放入dx
+ 004C  8B CA				MOV CX,DX;余数放入cx
+ 004E  8B D3				MOV DX,BX;高16位放入dx 低16位放入ax
+					
+ 0050  89 16 000A R			MOV RESULTH,DX
+ 0054  A3 000C R			MOV RESULTL,AX
+ 0057  51				PUSH CX;将余数入栈
+					
+ 0058  8B 0E 000E R			MOV CX,COUNT;计数加一
+ 005C  41				INC CX;
+ 005D  89 0E 000E R			MOV COUNT,CX;
+					
+ 0061  83 FA 00				CMP DX,0;高16位不为0 则商肯定不为0 继续短除
+ 0064  75 CF				JNZ STEP3		 
+ 0066  83 F8 00				CMP AX,0;高16位为0 低16位不为0 继续短除
+ 0069  75 CA				JNZ STEP3
+					
+ 006B  8B 0E 000E R			MOV CX,COUNT;商为0 设定输出循环次数
+					
+ 006F				OUTPUT:
+				    
+ 006F  5A			    POP DX;将后放入stack段的一个数拿出 放入dx
+ 0070  83 C2 30			    ADD DX,'0';将数值转化为字符放入dx
+				    
+ 0073  B4 02			    MOV AH,2
+ 0075  CD 21			    INT 21H;输出dl中ASCII对应的字符
+				    
+ 0077  E2 F6			    LOOP OUTPUT;CX递减到0时停止	
+				    
+ 0079  B4 4C			    MOV AH,4CH
+ 007B  CD 21			    INT 21H	
+
+					
+ 007D				MULDW PROC NEAR ;子程序 将累乘结果放入数据段
+					
+ 007D  83 F8 00				CMP AX,0;NUM是否为0
+ 0080  75 0E				JNZ STEP4
+ 0082  C7 06 000A R 0000		MOV RESULTH,0
+ 0088  C7 06 000C R 0001		MOV RESULTL,1
+ 008E  EB 05				JMP RETURN
+
+ 0090				STEP4:
+					
+ 0090  50				PUSH AX
+ 0091  48				DEC AX
+ 0092  E8 FFE8				CALL MULDW
+					
+ 0095				RETURN:
+
+ 0095  58				POP AX
+ 0096  F7 26 000C R			MUL RESULTL;N*[(N-1)!低16位] 结果的低16位放入ax 高16位放入dx
+ 009A  8B DA				MOV BX,DX;BX暂时存放高16位
+ 009C  A3 000C R			MOV RESULTL,AX;低16位放入数据段
+ 009F  F7 26 000A R			MUL RESULTH;N*[(N-1)!高16位] 结果应当只存在低16位 放入ax
+ 00A3  03 C3				ADD AX,BX;实现双字乘法 其结果的高16位放入ax
+ 00A5  A3 000A R			MOV RESULTH,AX;高16位放入数据段
+
+ 00A8  C3				RET
+ 00A9				MULDW ENDP
+
+					    
+ 00A9				ERR1:
+
+ 00A9  8D 16 0000 R			LEA DX,STRING1
+ 00AD  B4 09				MOV AH,9
+ 00AF  CD 21				INT 21H
+					
+ 00B1  B4 4C			    MOV AH,4CH
+ 00B3  CD 21			    INT 21H
+ 00B5				CODES ENDS
+				    END START
+
+
+
+
+
+
+
+
+
+Microsoft (R) Macro Assembler Version 6.11		    05/14/18 01:25:01
+tempfile.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+CODES  . . . . . . . . . . . . .	16 Bit	 00B5	  Para	  Private 
+DATAS  . . . . . . . . . . . . .	16 Bit	 0010	  Para	  Private 
+STACKS . . . . . . . . . . . . .	16 Bit	 0000	  Para	  Private 
+
+
+Procedures,  parameters and locals:
+
+                N a m e                 Type     Value    Attr
+
+MULDW  . . . . . . . . . . . . .	P Near	 007D	  CODES	Length= 002C Public
+  STEP4  . . . . . . . . . . . .	L Near	 0090	  CODES	
+  RETURN . . . . . . . . . . . .	L Near	 0095	  CODES	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+COUNT  . . . . . . . . . . . . .	Word	 000E	  DATAS	
+ERR1 . . . . . . . . . . . . . .	L Near	 00A9	  CODES	
+INPUT  . . . . . . . . . . . . .	L Near	 0005	  CODES	
+NUM  . . . . . . . . . . . . . .	Word	 0008	  DATAS	
+OUTPUT . . . . . . . . . . . . .	L Near	 006F	  CODES	
+RESULTH  . . . . . . . . . . . .	Word	 000A	  DATAS	
+RESULTL  . . . . . . . . . . . .	Word	 000C	  DATAS	
+START  . . . . . . . . . . . . .	L Near	 0000	  CODES	
+STEP2  . . . . . . . . . . . . .	L Near	 002F	  CODES	
+STEP3  . . . . . . . . . . . . .	L Near	 0035	  CODES	
+STRING1  . . . . . . . . . . . .	Byte	 0000	  DATAS	
+
+	   0 Warnings
+	   0 Errors
