@@ -107,14 +107,14 @@ OUTPUT:
     INT 21H	
 
 	
-MULDW PROC FAR ;子程序 将累乘结果放入数据段
+MULDW PROC NEAR ;子程序 将累乘结果放入数据段
 ;
 ;
 ;	
 	PUSH AX
 	PUSH BX
 	PUSH CX
-	PUSH DX
+	PUSH DX	
 	
 	MOV DL,'C'
 	MOV AH,2
@@ -139,8 +139,8 @@ STEP4:
 	CALL MULDW
 	
 RETURN:
-
-	POP AX
+	
+	POP AX	
 	MUL RESULTL;N*[(N-1)!低16位] 结果的低16位放入ax 高16位放入dx
 	MOV BX,DX;BX暂时存放高16位
 	MOV RESULTL,AX;低16位放入数据段
