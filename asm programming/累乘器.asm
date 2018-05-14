@@ -30,6 +30,7 @@ INPUT:
     CMP AL,'9'
     JA ERR1
     
+    SUB AL,'0'    
     MOV AH,0;
     PUSH AX;暂时空出AX
     
@@ -44,10 +45,24 @@ INPUT:
     JMP INPUT
     
 STEP2:
+;
+;
+;
+	MOV DL,'A'
+	MOV AH,2
+	INT 21H
 	
-	MOV AX,NUM;用ax传值
+	MOV AX,1
+	PUSH AX
+	MOV AX,NUM;用ax传值 
 	CALL MULDW;调用子程序
-
+;
+;	
+;
+	MOV DL,'B'
+	MOV AH,2
+	INT 21H
+	
 STEP3:  ;转化为十进制放入堆栈段
 	
 	MOV CX,10;存放除数
@@ -92,11 +107,28 @@ OUTPUT:
     INT 21H	
 
 	
-MULDW PROC NEAR ;子程序 将累乘结果放入数据段
+MULDW PROC FAR ;子程序 将累乘结果放入数据段
+;
+;
+;	
+	PUSH AX
+	PUSH BX
+	PUSH CX
+	PUSH DX
 	
+	MOV DL,'C'
+	MOV AH,2
+	INT 21H
+	
+	POP DX
+	POP CX
+	POP BX
+	POP AX
+;
+;
+;	
 	CMP AX,0;NUM是否为0
 	JNZ STEP4
-	MOV RESULTH,0
 	MOV RESULTL,1
 	JMP RETURN
 
@@ -130,6 +162,10 @@ ERR1:
     INT 21H
 CODES ENDS
     END START
+
+
+
+
 
 
 
