@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 6.11		    03/28/18 12:56:04
+Microsoft (R) Macro Assembler Version 6.11		    06/03/18 15:40:58
 tempfile.asm						     Page 1 - 1
 
 
@@ -38,7 +38,8 @@ tempfile.asm						     Page 1 - 1
  002E  CD 21			    INT 21H
  0030				CODES ENDS
 				    END START
-Microsoft (R) Macro Assembler Version 6.11		    03/28/18 12:56:04
+
+Microsoft (R) Macro Assembler Version 6.11		    06/03/18 15:40:58
 tempfile.asm						     Symbols 2 - 1
 
 
