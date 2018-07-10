@@ -13,27 +13,38 @@ class Cordinates():
 
 def restartGame(): 
     pyautogui.click(Cordinates.replayBtn)
+    pyautogui.keyDown('down')
 
 def pressSpace():
+    pyautogui.keyUp('down')
     pyautogui.keyDown('space')
-    time.sleep(0.05)
+    time.sleep(0.18)
     #print("Jump")
     pyautogui.keyUp('space')
+    pyautogui.keyDown('down')
+
 
 def imageGrab():
-    box = {225, 515, 241, 537 }
-    image = ImageGrab.grab(box)
-    print(image )
+    box = (320, 525, 380, 530)
+    image = ImageGrab.grab(bbox=box)
+#    image.show('image')
     gray_image = ImageOps.grayscale(image)
     a = array(gray_image.getcolors())
-    print(a.sum())
+    #print(a.sum())
     return a.sum()
+
+def test():
+    while True:
+        imageGrab()
 
 def main():
     restartGame()
     while True:
-        if(imageGrab() != 2247):
+        if(imageGrab() != 547):
             pressSpace()
-            time.sleep(0.1)
+            print('Jump')
+            #time.sleep(0.1)
 
 main()
+
+test()
