@@ -1,3 +1,99 @@
+//using namespace std;
+//#include <iostream>
+//
+//bool cube(int num){
+//	
+//	int n,sum=0;
+//	n = num-(num/10)*10;
+//	sum += n*n*n;
+//	n = num/10-(num/100)*10;
+//	sum += n*n*n;
+//	n = num/100;
+//	sum += n*n*n;
+//	
+//	if(sum==num) {
+//		return true;
+//	}
+//	return false;
+//}
+//
+//
+//int main(){
+//
+//    int num[10][2];
+//    int m=0,n=0,count=0,i=0,j=0,line;
+//	int daffodil[10];
+//	
+//
+//	
+//	
+//	for(i=0;i<10;i++){
+//		daffodil[i] = 0;
+//	} 
+//	i = 0;
+//	j = 0;
+//	while(true){
+//		char c1 = cin.get();
+//		if(c1=='\n') break;
+//		cin>>m>>n;
+//		m += 100*(int(c1)-48);
+//		num[j][0] = m;
+//        num[j][1] = n;
+//  		j++;
+//  		
+//		char c = cin.get();
+//	
+////		cout<<m<<' '<<n<<endl;		
+//	}
+//
+//	i = 0;
+//	line = j;
+//	while(i<line){
+//		j = 0;
+//		while(j<10){
+//			daffodil[j] = 0;
+//			j++;
+//		}		 
+//		j = num[i][1] - num[i][0];
+//		count = 0;
+//		while(j>=0){
+//			
+//			if(cube(num[i][0]+j)){
+//				daffodil[count] = num[i][0]+j;
+//				count++;
+//			}
+//			
+//			j--;
+//		}
+//		count--;	
+//			
+//		if(count==-1){
+//			cout<<"no"<<endl;
+//		}
+//		
+//		else if(count==0){
+//			
+//			cout<<daffodil[0]<<endl;
+//				
+//		}
+//		
+//		else{
+//		
+//			while(count>0){
+//				
+//				cout<<daffodil[count];
+//				cout<<" ";
+//				count--;
+//				
+//			}
+//			cout<<daffodil[0]<<endl;
+//		}
+//
+//		i++;
+//	}
+//
+//    return 0;
+//}
 using namespace std;
 #include <iostream>
 
@@ -17,80 +113,29 @@ bool cube(int num){
 	return false;
 }
 
-
 int main(){
-
-    int num[10][2];
-    int m=0,n=0,count=0,i=0,j=0,line;
-	int daffodil[10];
 	
-
-	
-	
-	for(i=0;i<10;i++){
-		daffodil[i] = 0;
-	} 
-	i = 0;
-	j = 0;
-	while(true){
-		char c1 = cin.get();
-		if(c1=='\n') break;
-		cin>>m>>n;
-		m += 100*(int(c1)-48);
-		num[j][0] = m;
-        num[j][1] = n;
-  		j++;
-  		
-		char c = cin.get();
-	
-//		cout<<m<<' '<<n<<endl;		
-	}
-
-	i = 0;
-	line = j;
-	while(i<line){
+	int m,n,i,j;
+	int result[10] = {0,0,0,0,0,0,0,0,0,0};
+	while(cin>>m>>n){
 		j = 0;
-		while(j<10){
-			daffodil[j] = 0;
-			j++;
-		}		 
-		j = num[i][1] - num[i][0];
-		count = 0;
-		while(j>=0){
-			
-			if(cube(num[i][0]+j)){
-				daffodil[count] = num[i][0]+j;
-				count++;
-			}
-			
-			j--;
+		for(i=m;i<=n;i++){			
+			if(cube(i)){
+				result[j] = i;
+				j++;
+			} 			
 		}
-		count--;	
-			
-		if(count==-1){
+		if(j==0){
 			cout<<"no"<<endl;
+			continue;
 		}
-		
-		else if(count==0){
-			
-			cout<<daffodil[0]<<endl;
-				
+		i = 0;
+		while(i<j-1){
+			cout<<result[i]<<' ';
+			i++;
 		}
-		
-		else{
-		
-			while(count>0){
-				
-				cout<<daffodil[count];
-				cout<<" ";
-				count--;
-				
-			}
-			cout<<daffodil[0]<<endl;
-		}
-
-		i++;
+		cout<<result[i]<<endl;
 	}
-
-    return 0;
-}
+	
+	return 0;
+} 
