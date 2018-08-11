@@ -214,6 +214,7 @@ Makefile: ../test/test.pro D:/Qt5/5.11.1/mingw53_32/mkspecs/win32-g++/qmake.conf
 		D:/Qt5/5.11.1/mingw53_32/mkspecs/features/qt_config.prf \
 		D:/Qt5/5.11.1/mingw53_32/mkspecs/win32-g++/qmake.conf \
 		D:/Qt5/5.11.1/mingw53_32/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		D:/Qt5/5.11.1/mingw53_32/mkspecs/features/exclusive_builds.prf \
 		D:/Qt5/5.11.1/mingw53_32/mkspecs/features/toolchain.prf \
 		D:/Qt5/5.11.1/mingw53_32/mkspecs/features/default_pre.prf \
@@ -395,6 +396,7 @@ D:/Qt5/5.11.1/mingw53_32/mkspecs/features/qt_functions.prf:
 D:/Qt5/5.11.1/mingw53_32/mkspecs/features/qt_config.prf:
 D:/Qt5/5.11.1/mingw53_32/mkspecs/win32-g++/qmake.conf:
 D:/Qt5/5.11.1/mingw53_32/mkspecs/features/spec_post.prf:
+.qmake.stash:
 D:/Qt5/5.11.1/mingw53_32/mkspecs/features/exclusive_builds.prf:
 D:/Qt5/5.11.1/mingw53_32/mkspecs/features/toolchain.prf:
 D:/Qt5/5.11.1/mingw53_32/mkspecs/features/default_pre.prf:

@@ -212,7 +212,7 @@ release/moc_mainwindow.cpp: D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/QMainWind
 		../test/mainwindow.h \
 		release/moc_predefs.h \
 		D:/Qt5/5.11.1/mingw53_32/bin/moc.exe
-	D:\Qt5\5.11.1\mingw53_32\bin\moc.exe $(DEFINES) --include release/moc_predefs.h -ID:/Qt5/5.11.1/mingw53_32/mkspecs/win32-g++ -IC:/Users/asus/Desktop/programming/Qt5/test -ID:/Qt5/5.11.1/mingw53_32/include -ID:/Qt5/5.11.1/mingw53_32/include/QtWidgets -ID:/Qt5/5.11.1/mingw53_32/include/QtGui -ID:/Qt5/5.11.1/mingw53_32/include/QtANGLE -ID:/Qt5/5.11.1/mingw53_32/include/QtCore -I. -ID:/Qt5/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -ID:/Qt5/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -ID:/Qt5/Tools/mingw530_32/i686-w64-mingw32/include -ID:/Qt5/Tools/mingw530_32/i686-w64-mingw32/include/c++ -ID:/Qt5/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -ID:/Qt5/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\test\mainwindow.h -o release\moc_mainwindow.cpp
+	D:\Qt5\5.11.1\mingw53_32\bin\moc.exe $(DEFINES) --include release/moc_predefs.h -ID:/Qt5/5.11.1/mingw53_32/mkspecs/win32-g++ -IC:/Users/houwd/Desktop/programming/Qt5/test -ID:/Qt5/5.11.1/mingw53_32/include -ID:/Qt5/5.11.1/mingw53_32/include/QtWidgets -ID:/Qt5/5.11.1/mingw53_32/include/QtGui -ID:/Qt5/5.11.1/mingw53_32/include/QtANGLE -ID:/Qt5/5.11.1/mingw53_32/include/QtCore -I. -ID:/Qt5/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -ID:/Qt5/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -ID:/Qt5/Tools/mingw530_32/i686-w64-mingw32/include -ID:/Qt5/Tools/mingw530_32/i686-w64-mingw32/include/c++ -ID:/Qt5/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -ID:/Qt5/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\test\mainwindow.h -o release\moc_mainwindow.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -350,7 +350,10 @@ release/main.o: ../test/main.cpp ../test/mainwindow.h \
 		D:/Qt5/5.11.1/mingw53_32/include/QtCore/qeventloop.h \
 		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qdesktopwidget.h \
 		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qguiapplication.h \
-		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qinputmethod.h
+		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qinputmethod.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qpainter.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qtextoption.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qpen.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\main.o ..\test\main.cpp
 
 release/mainwindow.o: ../test/mainwindow.cpp ../test/mainwindow.h \
@@ -460,7 +463,43 @@ release/mainwindow.o: ../test/mainwindow.cpp ../test/mainwindow.h \
 		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qtouchdevice.h \
 		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qtabwidget.h \
 		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qicon.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtCore/QVariant \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/QApplication \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qapplication.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtCore/qcoreapplication.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtCore/qeventloop.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qdesktopwidget.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qguiapplication.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qinputmethod.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/QGridLayout \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qgridlayout.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qlayout.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qlayoutitem.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qboxlayout.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/QLabel \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qlabel.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qframe.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/QLineEdit \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qlineedit.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qtextcursor.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qtextformat.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qpen.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtGui/qtextoption.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/QMenuBar \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qmenubar.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qmenu.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qaction.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qactiongroup.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/QPushButton \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qpushbutton.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/QSpacerItem \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/QStatusBar \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qstatusbar.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/QToolBar \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/qtoolbar.h \
+		D:/Qt5/5.11.1/mingw53_32/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\mainwindow.o ..\test\mainwindow.cpp
 
 release/moc_mainwindow.o: release/moc_mainwindow.cpp 
