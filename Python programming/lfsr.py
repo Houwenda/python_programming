@@ -27,15 +27,16 @@ p3 = 0
 p4 = 0
 p5 = 1
 
-string3 = [0,0,0,0,0,0]
-#string2 = string1[0:6]
-string2 = [1,0,1,0,1,1]
 '''
+string3 = [0,0,0,0,0,0]
+string2 = string1[0:6]
 j = 0
 for i in string2:
     string3[j] = i
     j += 1
 '''
+
+string2 = [1,0,1,0,1,1]
 i = 0
 while i<12:
 

@@ -6,7 +6,7 @@
 #      http://www.linuxsa.org.au/pipermail/linuxsa/2007-September/088131.html
 import itertools as it
 import random
-ip = '65.49.228.246'
+ip = '118.89.140.46'
 i = ip.split('.')
 
 

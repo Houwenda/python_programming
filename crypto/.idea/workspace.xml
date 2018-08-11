@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a9080af2-b6c8-499d-91a4-b886b7e074c3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../Python programming/DinosaurBot/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Python programming/lfsr.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../.vscode/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Python programming/DinosaurBot/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Python programming/DinosaurBot/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Python programming/DinosaurBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Python programming/DinosaurBot/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/Makefile.Debug" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/Makefile.Debug" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/Makefile.Release" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/Makefile.Release" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/debug/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/debug/main.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/debug/mainwindow.o" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/debug/mainwindow.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/debug/moc_mainwindow.o" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/debug/moc_mainwindow.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/debug/test.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/debug/test.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/ui_mainwindow.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/build-test-Desktop_Qt_5_11_1_MinGW_32bit-Debug/ui_mainwindow.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/test/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/test/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/test/mainwindow.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/test/mainwindow.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/test/mainwindow.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/test/mainwindow.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/test/mainwindow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/test/mainwindow.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/test/test.pro" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/test/test.pro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Qt5/test/test.pro.user" beforeDir="false" afterPath="$PROJECT_DIR$/../Qt5/test/test.pro.user" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-1381163092">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="3" />
+          <entry key="project.open.time.3" value="2" />
+          <entry key="project.open.time.55" value="1" />
+          <entry key="project.opened" value="3" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="443" />
+    <option name="y" value="-20" />
+    <option name="width" value="978" />
+    <option name="height" value="1089" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="crypto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="crypto" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a9080af2-b6c8-499d-91a4-b886b7e074c3" name="Default Changelist" comment="" />
+      <created>1533313043319</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1533313043319</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1340819" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32885906" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+</project>
