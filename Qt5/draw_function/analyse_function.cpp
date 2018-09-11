@@ -1,603 +1,670 @@
 using namespace std;
 #include <iostream>
 #include <cstring>
-#include <stack>
+#include <QStack>
 #include <cmath>
+#include <QString>
+#include <QTextStream>
+//#include <QDebug>
 
-//½â¾ö¸ººÅÎÊÌâ  (-1
-string negative_number(string input){
-	int i;
-	while(i<input.length()){
-		if(input[i]=='('&&input[i+1]=='-'&&input[i+2]>='0'&&input[i+2]<='9'){
-			string input_left = input.substr(0,i+1);
-			string input_right = input.substr(i+1);
+//è§£å†³è´Ÿå·é—®é¢˜  (-1  è§£å†³2(1
+QString negative_number(QString input){
+    int i = 0;
+    while(i<input.length()){
+        if(input[i]=='('&&input[i+1]=='-'&&input[i+2]>='0'&&input[i+2]<='9'){
+            QString input_left = input.mid(0,i+1);
+            QString input_right = input.mid(i+1);
 //			cout<<input_left<<endl;
-//			cout<<input_right<<endl;	
-			input = input_left + '0' +input_right;
+//			cout<<input_right<<endl;
+            input = input_left + '0' +input_right;
 //			cout<<input;
-		}
-		i++;
-	}
-	return input;
+            i = 0;
+            continue;
+        }
+        if(i>0&&input[i]=='('&&input[i-1]>='0'&&input[i-1]<='9'){
+            QString input_left = input.mid(0,i);
+            QString input_right = input.mid(i);
+            input = input_left + '*' + input_right;
+            i = 0;
+            continue;
+        }
+        i++;
+    }
+//    qDebug()<<"nega dealt with:"<<input;
+    return input;
 }
 
-int operator_priority(char x){
+int operator_priority(QChar x){
 
-	if(x=='+'||x=='-') return 1;
-	else if(x=='*'||x=='/') return 2;
-	else if(x=='^') return 3;
-	else if(x=='(') return 0;
-	return -1;
+    if(x=='+'||x=='-') return 1;
+    else if(x=='*'||x=='/') return 2;
+    else if(x=='^') return 3;
+    else if(x=='(') return 0;
+    return -1;
 }
 
-int compare_priority(char a, char b){
-	if(operator_priority(a) <= operator_priority(b)) return 1;
-	else return 0;
+int compare_priority(QChar a, QChar b){
+    if(operator_priority(a) <= operator_priority(b)) return 1;
+    else return 0;
 }
 
-double calculate(string input){
+double calculate(QString input){
 
-	stack<char> ope;
-	stack<double> number;
-	char tmp[20];
-	double tmp_num;
-	int i,j;
-	
-	input = negative_number(input);
-	
-	for(i=0;i<input.length();i++){
-		
-		//Êı×Ö
-		if(input[i]>='0'&&input[i]<='9'){
-			j = 0;
-			while((input[i+j]>='0'&&input[i+j]<='9')||input[i+j]=='.'){
-				tmp[j] = input[i+j];
-				j++;
-			}
-			tmp[j] = 0;
-			sscanf(tmp, "%lf", &tmp_num);
-			number.push(tmp_num);
-			i = i + j -1;
-		}
-		//·ûºÅ
-		else{
-			if(input[i]=='('){
-				ope.push(input[i]);
-				continue;
-			}
-			bool flag = false;
-			while(!ope.empty()&&compare_priority(input[i], ope.top())){
-				char ch = ope.top();
-				if(input[i]==')'){
-					if(flag) break;
-					if(ch=='(') flag = true;
-				}
-				ope.pop();
-				if(ch == '*'){
-					double x = number.top();
-					number.pop();
-					double y = number.top();
-					number.pop();
-					number.push(x*y);
-				}
-				if (ch == '/'){
-            		double x = number.top();
-					number.pop();
-            		double y = number.top();
-					number.pop();
-            		number.push(y / x);
-        		}
-        		if (ch == '+'){
-            		double x = number.top();
-					number.pop();
-            		double y = number.top();
-					number.pop();
-            		number.push(x + y);
-        		}
-        		if (ch == '-'){
-          			double x = number.top();
-					number.pop();
-          			double y = number.top();
-					number.pop();
-          			number.push(y - x);
-        		}
-        		if (ch == '^'){
-            		double exp = number.top();
-            		number.pop();
-            		double base = number.top();
-          			number.pop();
-            		number.push(pow(base, exp));
-				}
-			}
-			if(input[i] != ')') ope.push(input[i]);
-		}
+    QStack<QChar> ope;
+    QStack<double> number;
+    QChar tmp[20];
+    double tmp_num;
+    int i,j;
 
-	}
+    input = negative_number(input);
+    for(i=0;i<input.length();i++){
 
-	return number.top();
+        //æ•°å­—
+        if(input[i]>='0'&&input[i]<='9'){
+            j = 0;
+            while((input[i+j]>='0'&&input[i+j]<='9')||input[i+j]=='.'){
+                tmp[j] = input[i+j];
+                j++;
+            }
+            tmp[j] = 0;
+            tmp_num = QString(tmp).toDouble();//sscanf(tmp, "%lf", &tmp_num);
+            number.push(tmp_num);
+            i = i + j -1;
+        }
+        //ç¬¦å·
+        else{
+            if(input[i]=='('){
+                ope.push(input[i]);
+                continue;
+            }
+            bool flag = false;
+            while(!ope.empty()&&compare_priority(input[i], ope.top())){
+                QChar ch = ope.top();
+                if(input[i]==')'){
+                    if(flag) break;
+                    if(ch=='(') flag = true;
+                }
+                ope.pop();
+                if(ch == '*'){
+                    double x = number.top();
+                    number.pop();
+                    double y = number.top();
+                    number.pop();
+                    number.push(x*y);
+                }
+                if (ch == '/'){
+                    double x = number.top();
+                    number.pop();
+                    double y = number.top();
+                    number.pop();
+                    number.push(y / x);
+                }
+                if (ch == '+'){
+                    double x = number.top();
+                    number.pop();
+                    double y = number.top();
+                    number.pop();
+                    number.push(x + y);
+                }
+                if (ch == '-'){
+                    double x = number.top();
+                    number.pop();
+                    double y = number.top();
+                    number.pop();
+                    number.push(y - x);
+                }
+                if (ch == '^'){
+                    double exp = number.top();
+                    number.pop();
+                    double base = number.top();
+                    number.pop();
+                    number.push(pow(base, exp));
+                }
+            }
+            if(input[i] != ')') ope.push(input[i]);
+        }
+
+    }
+    double result = number.top();
+    number.pop();
+    return result;
 }
 
-//½«doubleÊı×ª»»Îª×Ö·û´® 
-string double_to_string(double num){	
-	char str[256];
-    sprintf(str, "%lf", num);
-    string result = str;
+//å°†doubleæ•°è½¬æ¢ä¸ºå­—ç¬¦ä¸²
+QString double_to_string(double num){
+    //QChar str[256];
+    //sprintf(str, "%lf", num);
+    //QString result = QString(str);
+    QString result = QString::number(num,'f',4);
     return result;
 }
 
 
-//sin -> s 
+//sin -> s
 //cos -> c
 //tan -> t
 //ln -> l
 //arctan -> a
 //exp -> e
-string shorten_function(string str){
-	
-	int i,j,length;
-	string str_left,str_right;
-	length = str.length();
-	i = 0;
-	while(i<length){
-		//sin()
-		if(str[i] == 's'){
-			if(str[i+1]=='i'&&str[i+2]=='n'&&str[i+3]=='('){
-				str_left = str.substr(0,i);
-				str_right = str.substr(i+3);
-				str = str_left + 's' +str_right;
-				i = 0;
-				continue;
-			} 
-		}
-		//cos()
-		else if(str[i] == 'c'){
-			if(str[i+1]=='o'&&str[i+2]=='s'&&str[i+3]=='('){
-				str_left = str.substr(0,i);
-				str_right = str.substr(i+3);
-				str = str_left + 'c' +str_right;
-				i = 0;
-				continue;
-			}
-		}
-		//tan()
-		else if(str[i] == 't'){
-			if(str[i+1]=='a'&&str[i+2]=='n'&&str[i+3]=='('){
-				str_left = str.substr(0,i);
-				str_right = str.substr(i+3);
-				str = str_left + 't' +str_right;
-				i = 0;
-				continue;
-			}
-		}
-		//ln()
-		else if(str[i] == 'l'){
-			if(str[i+1]=='n'&&str[i+2]=='('){
-				str_left = str.substr(0,i);
-				str_right = str.substr(i+2);
-				str = str_left + 'l' +str_right;
-				i = 0;
-				continue;
-			}
-		}
-		//arctan()
-		else if(str[i] == 'a'){
-			if(str[i+1]=='r'&&str[i+2]=='c'&&str[i+3]=='t'&&str[i+4]=='a'&&str[i+5]=='n'&&str[i+6]=='('){
-				str_left = str.substr(0,i);
-				str_right = str.substr(i+6);
-				str = str_left + 'a' +str_right;
-				i = 0;
-				continue;
-			}
-		}
-		//exp()
-		else if(str[i] == 'e'){
-			if(str[i+1]=='x'&&str[i+2]=='p'&&str[i+3]=='('){
-				str_left = str.substr(0,i);
-				str_right = str.substr(i+3);
-				str = str_left + 'e' +str_right;
-				i = 0;
-				continue;
-			}
-		}
-		i++;
-	}
-	return str;
+QString shorten_function(QString str){
+
+    int i,length;
+    QString str_left,str_right;
+    length = str.length();
+    i = 0;
+    while(i<length){
+        //sin()
+        if(str[i] == 's'){
+            if(str[i+1]=='i'&&str[i+2]=='n'&&str[i+3]=='('){
+                str_left = str.mid(0,i);
+                str_right = str.mid(i+3);
+                str = str_left + 's' +str_right;
+                i = 0;
+                continue;
+            }
+        }
+        //cos()
+        else if(str[i] == 'c'){
+            if(str[i+1]=='o'&&str[i+2]=='s'&&str[i+3]=='('){
+                str_left = str.mid(0,i);
+                str_right = str.mid(i+3);
+                str = str_left + 'c' +str_right;
+                i = 0;
+                continue;
+            }
+        }
+        //tan()
+        else if(str[i] == 't'){
+            if(str[i+1]=='a'&&str[i+2]=='n'&&str[i+3]=='('){
+                str_left = str.mid(0,i);
+                str_right = str.mid(i+3);
+                str = str_left + 't' +str_right;
+                i = 0;
+                continue;
+            }
+        }
+        //ln()
+        else if(str[i] == 'l'){
+            if(str[i+1]=='n'&&str[i+2]=='('){
+                str_left = str.mid(0,i);
+                str_right = str.mid(i+2);
+                str = str_left + 'l' +str_right;
+                i = 0;
+                continue;
+            }
+        }
+        //arctan()
+        else if(str[i] == 'a'){
+            if(str[i+1]=='r'&&str[i+2]=='c'&&str[i+3]=='t'&&str[i+4]=='a'&&str[i+5]=='n'&&str[i+6]=='('){
+                str_left = str.mid(0,i);
+                str_right = str.mid(i+6);
+                str = str_left + 'a' +str_right;
+                i = 0;
+                continue;
+            }
+        }
+        //exp()
+        else if(str[i] == 'e'){
+            if(str[i+1]=='x'&&str[i+2]=='p'&&str[i+3]=='('){
+                str_left = str.mid(0,i);
+                str_right = str.mid(i+3);
+                str = str_left + 'e' +str_right;
+                i = 0;
+                continue;
+            }
+        }
+        i++;
+    }
+    return str;
 }
 
 //s(1+s(x+(1+1)))
 //s(s())
 //sin() cos() tan() arctan() ln() exp()
-string function_convert(string input){
-	
-	double tmp_result;
-	string tmp_str;
+QString function_convert(QString input){
+
+    double tmp_result;
+    QString tmp_str;
 //	input = shorten_function(input);
-	int i = input.length() - 4;
-	string tmp;
-	char tmp1[20];
-	while(i >= 0){
-		//sin()
-		if(input[i]=='s'){
-			int j = 2;
-			int count=1;
+    int i = input.length() - 4;
+    QString tmp;
+    QChar tmp1[20];
+    while(i >= 0){
+        //sin()
+        if(input[i]=='s'){
+            int j = 2;
+            int count=1;
 //			tmp.append(a,1);
-			tmp1[0] = '(';
+            tmp1[0] = '(';
 
-			while(count!=0){
-				if(input[i+j]=='(') count++;
-				else if(input[i+j]==')') count--;
-				
+            while(count!=0){
+                if(input[i+j]=='(') count++;
+                else if(input[i+j]==')') count--;
+
 //				tmp.append(input,i+j,1);
-				tmp1[j-1] = input[i+j];
-				j++;
-			}
-			tmp1[j-1] = '\0';
+                tmp1[j-1] = input[i+j];
+                j++;
+            }
+            tmp1[j-1] = '\0';
 //			cout<<tmp1<<endl;
-			
-			tmp = tmp1;
-			
-			tmp_result = calculate(tmp);
-			tmp_result = sin(tmp_result);	
-			tmp_str = double_to_string(tmp_result);
-			
-			string input_left = input.substr(0,i);
-			string input_right = input.substr(i+j);
-			
+
+            tmp = QString(tmp1);
+
+            tmp_result = calculate(tmp);
+            tmp_result = sin(tmp_result);
+            tmp_str = double_to_string(tmp_result);
+
+            QString input_left = input.mid(0,i);
+            QString input_right = input.mid(i+j);
+
 //			cout<<input_left<<endl;
 //			cout<<input_right<<endl;
 //			cout<<tmp_str<<endl;
-			
-			input = input_left + '(' + tmp_str + ')' + input_right;
-			i = input.length()-4;
-			continue;
-		}
-		//cos()
-		else if(input[i]=='c'){
-			int j = 2;
-			int count=1;
-//			tmp.append(a,1);
-			tmp1[0] = '(';
 
-			while(count!=0){
-				if(input[i+j]=='(') count++;
-				else if(input[i+j]==')') count--;
-				
+            input = input_left + '(' + tmp_str + ')' + input_right;
+            i = input.length()-4;
+            continue;
+        }
+        //cos()
+        else if(input[i]=='c'){
+            int j = 2;
+            int count=1;
+//			tmp.append(a,1);
+            tmp1[0] = '(';
+
+            while(count!=0){
+                if(input[i+j]=='(') count++;
+                else if(input[i+j]==')') count--;
+
 //				tmp.append(input,i+j,1);
-				tmp1[j-1] = input[i+j];
-				j++;
-			}
-			tmp1[j-1] = '\0';
+                tmp1[j-1] = input[i+j];
+                j++;
+            }
+            tmp1[j-1] = '\0';
 //			cout<<tmp1<<endl;
-			
-			tmp = tmp1;
-			
-			tmp_result = calculate(tmp);
-			tmp_result = cos(tmp_result);	
-			tmp_str = double_to_string(tmp_result);
-			
-			string input_left = input.substr(0,i);
-			string input_right = input.substr(i+j);
-			
+
+            tmp = QString(tmp1);
+
+            tmp_result = calculate(tmp);
+            tmp_result = cos(tmp_result);
+            tmp_str = double_to_string(tmp_result);
+
+            QString input_left = input.mid(0,i);
+            QString input_right = input.mid(i+j);
+
 //			cout<<input_left<<endl;
 //			cout<<input_right<<endl;
 //			cout<<tmp_str<<endl;
-			
-			input = input_left + '(' + tmp_str + ')' + input_right;
-			i = input.length()-4;
-			continue;
-		} 
-		//tan()
-		else if(input[i]=='t'){
-			int j = 2;
-			int count=1;
-//			tmp.append(a,1);
-			tmp1[0] = '(';
 
-			while(count!=0){
-				if(input[i+j]=='(') count++;
-				else if(input[i+j]==')') count--;
-				
+            input = input_left + '(' + tmp_str + ')' + input_right;
+            i = input.length()-4;
+            continue;
+        }
+        //tan()
+        else if(input[i]=='t'){
+            int j = 2;
+            int count=1;
+//			tmp.append(a,1);
+            tmp1[0] = '(';
+
+            while(count!=0){
+                if(input[i+j]=='(') count++;
+                else if(input[i+j]==')') count--;
+
 //				tmp.append(input,i+j,1);
-				tmp1[j-1] = input[i+j];
-				j++;
-			}
-			tmp1[j-1] = '\0';
+                tmp1[j-1] = input[i+j];
+                j++;
+            }
+            tmp1[j-1] = '\0';
 //			cout<<tmp1<<endl;
-			
-			tmp = tmp1;
-			
-			tmp_result = calculate(tmp);
-			tmp_result = tan(tmp_result);	
-			tmp_str = double_to_string(tmp_result);
-			
-			string input_left = input.substr(0,i);
-			string input_right = input.substr(i+j);
-			
+
+            tmp = QString(tmp1);
+
+            tmp_result = calculate(tmp);
+            tmp_result = tan(tmp_result);
+            tmp_str = double_to_string(tmp_result);
+
+            QString input_left = input.mid(0,i);
+            QString input_right = input.mid(i+j);
+
 //			cout<<input_left<<endl;
 //			cout<<input_right<<endl;
 //			cout<<tmp_str<<endl;
-			
-			input = input_left + '(' + tmp_str + ')' + input_right;
-			i = input.length()-4;
-			continue;
-		}
-		//arctan()
-		if(input[i]=='a'){
-			int j = 2;
-			int count=1;
-//			tmp.append(a,1);
-			tmp1[0] = '(';
 
-			while(count!=0){
-				if(input[i+j]=='(') count++;
-				else if(input[i+j]==')') count--;
-				
+            input = input_left + '(' + tmp_str + ')' + input_right;
+            i = input.length()-4;
+            continue;
+        }
+        //arctan()
+        if(input[i]=='a'){
+            int j = 2;
+            int count=1;
+//			tmp.append(a,1);
+            tmp1[0] = '(';
+
+            while(count!=0){
+                if(input[i+j]=='(') count++;
+                else if(input[i+j]==')') count--;
+
 //				tmp.append(input,i+j,1);
-				tmp1[j-1] = input[i+j];
-				j++;
-			}
-			tmp1[j-1] = '\0';
+                tmp1[j-1] = input[i+j];
+                j++;
+            }
+            tmp1[j-1] = '\0';
 //			cout<<tmp1<<endl;
-			
-			tmp = tmp1;
-			
-			tmp_result = calculate(tmp);
-			tmp_result = atan(tmp_result);	
-			tmp_str = double_to_string(tmp_result);
-			
-			string input_left = input.substr(0,i);
-			string input_right = input.substr(i+j);
-			
+
+            tmp = QString(tmp1);
+
+            tmp_result = calculate(tmp);
+            tmp_result = atan(tmp_result);
+            tmp_str = double_to_string(tmp_result);
+
+            QString input_left = input.mid(0,i);
+            QString input_right = input.mid(i+j);
+
 //			cout<<input_left<<endl;
 //			cout<<input_right<<endl;
 //			cout<<tmp_str<<endl;
-			
-			input = input_left + '(' + tmp_str + ')' + input_right;
-			i = input.length()-4;
-			continue;
-		}
-		//exp()
-		else if(input[i]=='e'){
-			int j = 2;
-			int count=1;
-//			tmp.append(a,1);
-			tmp1[0] = '(';
 
-			while(count!=0){
-				if(input[i+j]=='(') count++;
-				else if(input[i+j]==')') count--;
-				
+            input = input_left + '(' + tmp_str + ')' + input_right;
+            i = input.length()-4;
+            continue;
+        }
+        //exp()
+        else if(input[i]=='e'){
+            int j = 2;
+            int count=1;
+//			tmp.append(a,1);
+            tmp1[0] = '(';
+
+            while(count!=0){
+                if(input[i+j]=='(') count++;
+                else if(input[i+j]==')') count--;
+
 //				tmp.append(input,i+j,1);
-				tmp1[j-1] = input[i+j];
-				j++;
-			}
-			tmp1[j-1] = '\0';
+                tmp1[j-1] = input[i+j];
+                j++;
+            }
+            tmp1[j-1] = '\0';
 //			cout<<tmp1<<endl;
-			
-			tmp = tmp1;
-			
-			tmp_result = calculate(tmp);
-			tmp_result = exp(tmp_result);	
-			tmp_str = double_to_string(tmp_result);
-			
-			string input_left = input.substr(0,i);
-			string input_right = input.substr(i+j);
-			
+
+            tmp = QString(tmp1);
+
+            tmp_result = calculate(tmp);
+            tmp_result = exp(tmp_result);
+            tmp_str = double_to_string(tmp_result);
+
+            QString input_left = input.mid(0,i);
+            QString input_right = input.mid(i+j);
+
 //			cout<<input_left<<endl;
 //			cout<<input_right<<endl;
 //			cout<<tmp_str<<endl;
-			
-			input = input_left + '(' + tmp_str + ')' + input_right;
-			i = input.length()-4;
-			continue;
-		}
-		//ln()
-		else if(input[i]=='l'){
-			int j = 2;
-			int count=1;
-			const char a='(';
-//			tmp.append(a,1);
-			tmp1[0] = '(';
 
-			while(count!=0){
-				if(input[i+j]=='(') count++;
-				else if(input[i+j]==')') count--;
-				
+            input = input_left + '(' + tmp_str + ')' + input_right;
+            i = input.length()-4;
+            continue;
+        }
+        //ln()
+        else if(input[i]=='l'){
+            int j = 2;
+            int count=1;
+//			tmp.append(a,1);
+            tmp1[0] = '(';
+
+            while(count!=0){
+                if(input[i+j]=='(') count++;
+                else if(input[i+j]==')') count--;
+
 //				tmp.append(input,i+j,1);
-				tmp1[j-1] = input[i+j];
-				j++;
-			}
-			tmp1[j-1] = '\0';
+                tmp1[j-1] = input[i+j];
+                j++;
+            }
+            tmp1[j-1] = '\0';
 //			cout<<tmp1<<endl;
-			
-			tmp = tmp1;
-			
-			tmp_result = calculate(tmp);
-			tmp_result = log(tmp_result);	
-			tmp_str = double_to_string(tmp_result);
-			
-			string input_left = input.substr(0,i);
-			string input_right = input.substr(i+j);
-			
+
+            tmp = QString(tmp1);
+
+            tmp_result = calculate(tmp);
+            tmp_result = log(tmp_result);
+            tmp_str = double_to_string(tmp_result);
+
+            QString input_left = input.mid(0,i);
+            QString input_right = input.mid(i+j);
+
 //			cout<<input_left<<endl;
 //			cout<<input_right<<endl;
 //			cout<<tmp_str<<endl;
-			
-			input = input_left + '(' + tmp_str + ')' + input_right;
-			i = input.length()-4;
-			continue;
-		}
-		else{
-			i--;
-		}
 
-	}
-	return input;
-} 
- 
-//¼ì²éÊäÈëºÏ·¨ĞÔ 
-bool check(char * str){
-	int count,i;
-	//µÚÒ»¸ö×Ö·ûÖ»ÄÜÊÇx»òÊı×Ö»ò(	
-	if(str[0]=='X'||str[0]=='('||(str[0]>='0'&&str[0]<='9')){} 
-	else return false;
-	
-	//ÖĞ¼ä×Ö·û 
-	for(i=1;i<strlen(str)-1;i++){
-		if(str[i]=='X'){
-			//Ã¿¸öxÇ°Ö»ÄÜÊÇÊı×Ö»ò+-»ò^»ò( 
-			if(str[i-1]=='+'||str[i-1]=='-'||str[i-1]=='('||str[i-1]=='^'||(str[i-1]>='0'&&str[i-1]<='9')){}
-			else{
-				cout<<"before x"<<endl;
-				return false;
-			} 
-			//Ã¿¸öxºóÖ»ÄÜÊÇ^»ò+-*/»ò)
-			if(str[i+1]=='^'||str[i+1]=='+'||str[i+1]=='-'||str[i+1]==')'||str[i+1]=='*'||str[i+1]=='/'){} 
-			else{
-				cout<<"after x"<<endl; 
-				return false;
-			} 
-		}
-		else if(str[i]=='+'||str[i]=='-'||str[i]=='*'||str[i]=='/'){
-			//ÔËËã·ûºÅÇ°Ö»ÄÜÊÇÊı×Ö»òx»ò) 
-			if(str[i-1]=='X'||str[i-1]==')'||(str[i-1]>='0'&&str[i-1]<='9')){}
-			else if(str[i]=='-'&&str[i-1]=='^'){}  //ÌØÊâ x^-2 
-			else{
-				cout<<"before sign"<<endl;
-				return false;
-			} 
-			//ÔËËã·ûºÅºóÖ»ÄÜÊÇÊı×Ö»òx»ò(
-			if(str[i+1]=='X'||str[i+1]=='('||(str[i+1]>='0'&&str[i+1]<='9')){}
-			else{
-				cout<<"after sign"<<endl;
-				return false;
-			} 
-		}
-		else if(str[i]=='('){
-			//Ã¿¸ö(Ç°Ö»ÄÜÊÇ^»ò+-*/
-			if(str[i-1]=='^'||str[i-1]=='+'||str[i-1]=='-'||str[i-1]=='*'||str[i-1]=='/'){}
-			else{
-				cout<<"before ("<<endl;
-				return false;
-			} 
-			//Ã¿¸ö(ºóÖ»ÄÜÊÇÊı×Ö»òx 
-			if(str[i+1]=='X'||(str[i+1]>='0'&&str[i+1]<='9')){}
-			else{
-				cout<<"after ("<<endl;
-				return false;
-			}
-		} 
-		else if(str[i]==')'){
-			//Ã¿¸ö)Ç°Ö»ÄÜÊÇÊı×Ö»òx
-			if(str[i-1]=='X'||(str[i-1]>='0'&&str[i-1]<='9')){}
-			else{
-				cout<<"before )"<<endl;
-				return false;
-			}
-			//Ã¿¸ö)ºóÖ»ÄÜÊÇ^»ò+-*/ 
-			if(str[i+1]=='^'||str[i+1]=='+'||str[i+1]=='-'||str[i+1]=='*'||str[i+1]=='/'){}
-			else{
-				cout<<"after )"<<endl;
-				return false;
-			}
-		}
-		else if(str[i]=='^'){
-			//Ã¿¸ö^Ç°Ö»ÄÜÊÇ)»òÊı×Ö»òx
-			if(str[i-1]==')'||str[i-1]=='X'||(str[i-1]>='0'&&str[i-1]<='9')){}
-			else{
-				cout<<"before ^"<<endl;
-				return false;
-			}
-			//Ã¿¸ö^ºóÖ»ÄÜÊÇ(»òÊı×Ö»òx»ò-
-			if(str[i+1]=='('||str[i+1]=='X'||str[i+1]=='-'||(str[i+1]>='0'&&str[i+1]<='9')){}
-			else{
-				cout<<"after ^"<<endl;
-				return false;
-			}
-		}
-		else if(str[i]=='.'){
-			//Ã¿¸ö.Ç°ºóÖ»ÄÜÊÇÊı×Ö 
-			if(str[i-1]>='0'&&str[i-1]<='9'&&str[i+1]>='0'&&str[i+1]<='9'){}
-			else{
-				cout<<"near ."<<endl;
-				return false;
-			}
-		}
-	}
-	
-	//½áÎ²×Ö·ûÖ»ÄÜÊÇ)»òÊı×Ö»òx
-	if(str[strlen(str)-1]==')'||str[strlen(str)-1]=='X'||(str[strlen(str)-1]>='0'&&str[strlen(str)-1]<='9')){}
-	else return false;
-	 
-	//À¨ºÅ±ÕºÏÎÊÌâ
-	i = 0;
-	count = 0; 
-	while(i<strlen(str)){
-		if(str[i]=='(') count++;
-		else if(str[i]==')') count--;
-		
-		if(count<0) return false;
-		i++;
-	} 
-	if(count!=0){
-		cout<<"buckets error"<<endl;
-		return false;
-	}
-	
-	return true; 
+            input = input_left + '(' + tmp_str + ')' + input_right;
+            i = input.length()-4;
+            continue;
+        }
+        else{
+            i--;
+        }
+
+    }
+    return input;
+}
+/*
+//æ£€æŸ¥è¾“å…¥åˆæ³•æ€§
+bool check(QString str){
+    //æ£€æµ‹ç‰¹æ®Šå‡½æ•°
+    for(int i = 0;i<str.length();i++){
+        if(str[i]=='s'){
+            if(str[i+1]=='i'&&str[i+2]=='n'&&str[i+3]=='('){}
+            else return false;
+        }
+        else if(str[i]=='c'){
+            if(str[i+1]=='o'&&str[i+2]=='s'&&str[i+3]=='('){}
+            else return false;
+        }
+        else if(str[i]=='t'){
+            if(str[i+1]=='a'&&str[i+2]=='n'&&str[i+3]=='('){}
+            else return false;
+        }
+        else if(str[i]=='a'){
+            if(str[i+1]=='r'&&str[i+2]=='c'&&str[i+3]=='t'&&str[i+4]=='a'&&str[i+5]=='n'&&str[i+6]=='('){}
+            else return false;
+        }
+        else if(str[i]=='e'){
+            if(str[i+1]=='x'&&str[i+2]=='p'&&str[i+3]=='('){}
+            else return false;
+        }
+        else if(str[i]=='l'){
+            if(str[i+1]=='n'&&str[i+2]=='('){}
+            else return false;
+        }
+    }
+
+    //ç¼©çŸ­
+    QString shortened_str = shorten_function(str);
+    if(shortened_str=="") return false;
+
+    cout<<"shorten succeeded"<<endl;
+
+    int count,i;
+    //ç¬¬ä¸€ä¸ªå­—ç¬¦åªèƒ½æ˜¯xæˆ–æ•°å­—æˆ–(æˆ–sæˆ–cæˆ–tæˆ–aæˆ–læˆ–e
+    if(shortened_str[0]=='X'||shortened_str[0]=='s'||shortened_str[0]=='c'||shortened_str[0]=='t'||shortened_str[0]=='a'||shortened_str[0]=='l'||shortened_str[0]=='e'||shortened_str[0]=='('||(shortened_str[0]>='0'&&shortened_str[0]<='9')){}
+    else return false;
+
+    //ä¸­é—´å­—ç¬¦
+    for(i=1;i<shortened_str.length()-1;i++){
+        if(shortened_str[i]=='X'||shortened_str[i]=='s'||shortened_str[i]=='c'||shortened_str[i]=='t'||shortened_str[i]=='a'||shortened_str[i]=='l'||shortened_str[i]=='e'){
+            //æ¯ä¸ªx s c t a l eå‰åªèƒ½æ˜¯æ•°å­—æˆ–+-æˆ–^æˆ–(
+            if(shortened_str[i-1]=='+'||shortened_str[i-1]=='-'||shortened_str[i-1]=='('||shortened_str[i-1]=='^'||(shortened_str[i-1]>='0'&&shortened_str[i-1]<='9')){}
+            else{
+                cout<<"before x"<<endl;
+                return false;
+            }
+            //æ¯ä¸ªxååªèƒ½æ˜¯^æˆ–+-/*æˆ–)
+            if(shortened_str[i]=='X'&&(shortened_str[i+1]=='^'||shortened_str[i+1]=='+'||shortened_str[i+1]=='-'||shortened_str[i+1]==')'||shortened_str[i+1]=='*'||shortened_str[i+1]=='/')){}
+            //sctlaeåœ¨shorten_functionä¸­å·²ç»æ£€æµ‹è¿‡ï¼Œç¡®ä¿åé¢æ˜¯(
+            else if(shortened_str[i]=='s'||shortened_str[i]=='c'||shortened_str[i]=='t'||shortened_str[i]=='l'||shortened_str[i]=='a'||shortened_str[i]=='e'){}
+            else{
+                cout<<"after x"<<endl;
+                return false;
+            }
+        }
+        else if(shortened_str[i]=='+'||shortened_str[i]=='-'||shortened_str[i]=='*'||shortened_str[i]=='/'){
+            //è¿ç®—ç¬¦å·å‰åªèƒ½æ˜¯æ•°å­—æˆ–xæˆ–)
+            if(shortened_str[i-1]=='X'||shortened_str[i-1]==')'||(shortened_str[i-1]>='0'&&shortened_str[i-1]<='9')){}
+            else if(shortened_str[i]=='-'&&shortened_str[i-1]=='^'){}  //ç‰¹æ®Š x^-2
+            else{
+                cout<<"before sign"<<endl;
+                return false;
+            }
+            //è¿ç®—ç¬¦å·ååªèƒ½æ˜¯æ•°å­—æˆ–xæˆ–(
+            if(shortened_str[i+1]=='X'||shortened_str[i+1]=='('||(shortened_str[i+1]>='0'&&shortened_str[i+1]<='9')){}
+            else{
+                cout<<"after sign"<<endl;
+                return false;
+            }
+        }
+        else if(shortened_str[i]=='('){
+            //æ¯ä¸ª(å‰åªèƒ½æ˜¯^æˆ–+-/*æˆ–sctale
+            if(shortened_str[i-1]=='^'||shortened_str[i-1]=='+'||shortened_str[i-1]=='-'||shortened_str[i-1]=='*'||shortened_str[i-1]=='/'||shortened_str[i-1]=='s'||shortened_str[i-1]=='c'||shortened_str[i-1]=='t'||shortened_str[i-1]=='a'||shortened_str[i-1]=='l'||shortened_str[i-1]=='e'){}
+            else{
+                cout<<"before ("<<endl;
+                return false;
+            }
+            //æ¯ä¸ª(ååªèƒ½æ˜¯æ•°å­—æˆ–xæˆ–sctale
+            if(shortened_str[i+1]=='X'||shortened_str[i-1]=='s'||shortened_str[i-1]=='c'||shortened_str[i-1]=='t'||shortened_str[i-1]=='a'||shortened_str[i-1]=='l'||shortened_str[i-1]=='e'||(shortened_str[i+1]>='0'&&shortened_str[i+1]<='9')){}
+            else{
+                cout<<"after ("<<endl;
+                return false;
+            }
+        }
+        else if(shortened_str[i]==')'){
+            //æ¯ä¸ª)å‰åªèƒ½æ˜¯æ•°å­—æˆ–x
+            if(shortened_str[i-1]=='X'||(shortened_str[i-1]>='0'&&shortened_str[i-1]<='9')){}
+            else{
+                cout<<"before )"<<endl;
+                return false;
+            }
+            //æ¯ä¸ª)ååªèƒ½æ˜¯^æˆ–+-/*
+            if(shortened_str[i+1]=='^'||shortened_str[i+1]=='+'||shortened_str[i+1]=='-'||shortened_str[i+1]=='*'||shortened_str[i+1]=='/'){}
+            else{
+                cout<<"after )"<<endl;
+                return false;
+            }
+        }
+        else if(shortened_str[i]=='^'){
+            //æ¯ä¸ª^å‰åªèƒ½æ˜¯)æˆ–æ•°å­—æˆ–x
+            if(shortened_str[i-1]==')'||shortened_str[i-1]=='X'||(shortened_str[i-1]>='0'&&shortened_str[i-1]<='9')){}
+            else{
+                cout<<"before ^"<<endl;
+                return false;
+            }
+            //æ¯ä¸ª^ååªèƒ½æ˜¯(æˆ–æ•°å­—æˆ–xæˆ–-æˆ–sctlae
+            if(shortened_str[i+1]=='('||shortened_str[i+1]=='X'||shortened_str[i+1]=='s'||shortened_str[i+1]=='c'||shortened_str[i+1]=='t'||shortened_str[i+1]=='a'||shortened_str[i+1]=='l'||shortened_str[i+1]=='e'||shortened_str[i+1]=='-'||(shortened_str[i+1]>='0'&&shortened_str[i+1]<='9')){}
+            else{
+                cout<<"after ^"<<endl;
+                return false;
+            }
+        }
+        else if(shortened_str[i]=='.'){
+            //æ¯ä¸ª.å‰ååªèƒ½æ˜¯æ•°å­—
+            if(shortened_str[i-1]>='0'&&shortened_str[i-1]<='9'&&shortened_str[i+1]>='0'&&shortened_str[i+1]<='9'){}
+            else{
+                cout<<"near ."<<endl;
+                return false;
+            }
+        }
+    }
+
+    //ç»“å°¾å­—ç¬¦åªèƒ½æ˜¯)æˆ–æ•°å­—æˆ–x
+    if(shortened_str[shortened_str.length()-1]==')'||shortened_str[shortened_str.length()-1]=='X'||(shortened_str[shortened_str.length()-1]>='0'&&shortened_str[shortened_str.length()-1]<='9')){}
+    else return false;
+
+    //æ‹¬å·é—­åˆé—®é¢˜
+    i = 0;
+    count = 0;
+    while(i<shortened_str.length()){
+        if(shortened_str[i]=='(') count++;
+        else if(shortened_str[i]==')') count--;
+
+        if(count<0) return false;
+        i++;
+    }
+    if(count!=0){
+        cout<<"buckets error"<<endl;
+        return false;
+    }
+
+    return true;
+}
+*/
+/*
+QString replace_x(QString str, double n){
+    QString num;
+    int i;
+    //å°†doubleæ•°è½¬æ¢ä¸ºå­—ç¬¦ä¸²
+    num = double_to_string(n);
+    //cout<<num;
+    i = 0;
+    while(i<str.length()){
+
+        if(str[i]=='X'){
+            QString str_left = str.mid(0,i);
+            QString str_right = str.mid(i+1);
+            str = str_left + '(' + num + ')' + str_right;
+            i = 0;
+        }
+        else i++;
+    }
+    return str;
 }
 
-string replace_x(string str, double n){
-	string num;
-	int i;
-	double k;
-	//½«doubleÊı×ª»»Îª×Ö·û´® 
-	num = double_to_string(n);
-	//cout<<num; 
-	i = 0;
-	while(i<str.length()){
-		
-		if(str[i]=='X'){
-			string str_left = str.substr(0,i);
-			string str_right = str.substr(i+1);
-			str = str_left + '(' + num + ')' + str_right;
-			i = 0;
-		}
-		else i++;
-	}
-	return str;
-} 
 
+//æœ€ç»ˆè®¡ç®—
+double calculate_function(QString input, double x){
 
+    QString out1 = replace_x(input,x);
+    QString out2 = shorten_function(out1);
+    if(out2==""){
+        cout<<"error";
+        return 0;
+    }
+    QString out3 = function_convert(out2);
+    QString input2 = '(' + out3 + ")\0";
+    qDebug()<<input2<<endl;
+    qDebug()<<calculate(input2)<<endl;
 
+    return 0;
+
+}
+*/
+/*
 int main(){
 
-	string input;
-/*
-	string in;
-	cin>>input;
-	in = '(' + input + ")\0";
-	cout<<in<<endl;
-	cout<<calculate(in);
-*/
-/*
-	double x;
-	cin>>x;
-	cout<<double_to_string(x);
-*/
+    string input;
 
-/*
-	cin>>input;
-	negative_number(input);
-*/
+//	string in;
+//	cin>>input;
+//	in = '(' + input + ")\0";
+//	cout<<in<<endl;
+//	cout<<calculate(in);
 
-	cin>>input;
-	string out1 = replace_x(input,2);
-	cout<<out1<<endl;
-	string out2 = function_convert(shorten_function(out1));
-	string input2 = '(' + out2 + ")\0";
-	cout<<input2<<endl;
-	cout<<calculate(input2)<<endl;
 
-	return 0;
+//	double x;
+//	cin>>x;
+//	cout<<double_to_string(x);
+
+//	cin>>input;
+//	negative_number(input);
+
+    cin>>input;
+    string out1 = replace_x(input,2);
+    cout<<out1<<endl;
+    string out2 = function_convert(shorten_function(out1));
+    string input2 = '(' + out2 + ")\0";
+    cout<<input2<<endl;
+    cout<<calculate(input2)<<endl;
+
+    return 0;
 }
+*/
+
+

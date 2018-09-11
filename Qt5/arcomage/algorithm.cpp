@@ -1,12 +1,12 @@
-﻿#include "pch.h"
-#include<iostream>
-#include<vector>
-#include<string>
-#include<fstream>//读写文件头函数
-#include<random>
-#include<time.h>
-#include<stdlib.h>
-#include<windows.h>//sleep()函数调用
+﻿#include <vector>
+#include <QString>
+#include <fstream>//读写文件头函数
+#include <random>
+#include <time.h>
+#include <stdlib.h>
+#include <QDebug>
+#include <QFile>
+#include <windows.h>////Sleep()函数调用
 using namespace std;
 
 
@@ -15,7 +15,7 @@ int wall, castle, monster, brick, jewel, output, huihe, cardnumber;
  int  Original_Wall = 10;
  int Original_Castle = 25;
 int Original_Monster = 10, Original_Brick = 10, Original_Jewel = 10;
- char File_Name_Deck[20] = "..\\txt\\deck.txt";//牌
+ char File_Name_Deck[20] = "deck.txt";//牌
  int OriginalOutput = 2;
  int Original_CardNum = 6;
  int RoundsSum = 60;
@@ -26,7 +26,7 @@ int Original_Monster = 10, Original_Brick = 10, Original_Jewel = 10;
 //全局变量的定义
 //卡牌结构的定义
 struct MagicCard {
-	string CardName = "无";
+    QString CardName = "无";
 	int M_Castle = 0;//卡牌对我方城堡的效果
 	int M_Wall = 0;//卡牌对我方城墙的效果
 	int M_Monster = 0;//卡牌对我方怪兽的加成
@@ -41,7 +41,7 @@ struct MagicCard {
 	bool Is_PlayAgain = 0;//
 	bool IS_Special = 0;//
 	int SpecialNumber = 0;//对于Is_Special的完善——由于字符串匹配存在问题只能再新开一个
-	string Function = "无";//效果的文字表述，用于展示，
+    QString Function = "无";//效果的文字表述，用于展示，
 };
 vector<MagicCard> deck;//游戏中的81张卡的卡组
 //玩家结构的定义
@@ -61,19 +61,37 @@ struct Player {
 
 //初始化读取卡组文件(已完成)
 void Read_The_Card(vector<MagicCard> &Card) {
-	ifstream Infile(File_Name_Deck, ios::in);
-	if (!Infile.is_open())
-		cout << "未能成功找到卡组文件！" << endl;
-	string Newline_variable;//换行变量；
-	getline(Infile, Newline_variable);//先换一行
+    //ifstream Infile(File_Name_Deck, ios::in);
+    //if (!Infile.is_open())
+    //    qDebug() << "未能成功找到卡组文件！" << endl;
+    //cQString Newline_variable;//换行变量；
+    //getline(Infile, Newline_variable);//先换一行
 	MagicCard TempCard;
+    /*
 	while (!Infile.eof()) //判断是否读取到文件末尾
 	{
 		Infile >> TempCard.CardName >> TempCard.M_Castle >> TempCard.M_Wall >> TempCard.M_Monster >> TempCard.M_Brick >> TempCard.M_Jewel >> TempCard.O_Castle >> TempCard.O_Wall >> TempCard.O_Monster >> TempCard.O_Brick >> TempCard.O_Jewel >> TempCard.Is_PlayAgain >> TempCard.IS_Special >> TempCard.Attack >> TempCard.SpecialNumber >> TempCard.Function;
 		Card.push_back(TempCard);
 	}
-	Card.pop_back();
-	Infile.close();
+    */
+
+    QFile file("\\deck.txt");
+
+    if(!file.open(QIODevice::ReadWrite | QIODevice::Text)){
+        qDebug()<<"cannot open file"<<endl;
+    }
+    while(!file.atEnd()){
+        QByteArray line = file.readLine();
+        QString str(line);
+        /*
+        for(int i=0;i<str.length();i++){
+            if(str[])
+        }
+        */
+        qDebug()<<str<<endl;
+    }
+    //Card.pop_back();
+    //Infile.close();
 };
 //发牌（已完成）
 void Deal_Card(vector<MagicCard> &Hand) {
@@ -96,14 +114,14 @@ void  Initialization(Player &Player1, Player &Player2) {
 
 //展示玩家的情况（已完成）
 void Show_Player_Situation(Player Player1, Player Player2, int RoundsNum) {
-	cout << playername1 << "						" << "回合" << "(" << RoundsNum << "/" << RoundsSum << ")" << "						" << playername2 << endl;
-	cout << "砖头  " << Player1.PlayerBrick << "(+" << Player1.BrickOutput << ")  ";
-	cout << "宝石  " << Player1.PlayerJewel << "(+" << Player1.JewelOutput << ")  ";
-	cout << "怪物  " << Player1.PlayerMonster << "(+" << Player1.MonsterOutput << ")  ";
-	cout << "					";
-	cout << "砖头  " << Player2.PlayerBrick << "(+" << Player2.BrickOutput << ")  ";
-	cout << "宝石  " << Player2.PlayerJewel << "(+" << Player2.JewelOutput << ")  ";
-	cout << "怪物  " << Player2.PlayerMonster << "(+" << Player2.MonsterOutput << ")  " << endl;
+    qDebug() << playername1 << "						" << "回合" << "(" << RoundsNum << "/" << RoundsSum << ")" << "						" << playername2 << endl;
+    qDebug() << "砖头  " << Player1.PlayerBrick << "(+" << Player1.BrickOutput << ")  ";
+    qDebug() << "宝石  " << Player1.PlayerJewel << "(+" << Player1.JewelOutput << ")  ";
+    qDebug() << "怪物  " << Player1.PlayerMonster << "(+" << Player1.MonsterOutput << ")  ";
+    qDebug() << "					";
+    qDebug() << "砖头  " << Player2.PlayerBrick << "(+" << Player2.BrickOutput << ")  ";
+    qDebug() << "宝石  " << Player2.PlayerJewel << "(+" << Player2.JewelOutput << ")  ";
+    qDebug() << "怪物  " << Player2.PlayerMonster << "(+" << Player2.MonsterOutput << ")  " << endl;
 }
 
 
@@ -115,7 +133,7 @@ void CreatTxt(MagicCard LastCard, int RoundsNum)
 	if (outfile) { // 如果创建成功
 		int flag = RoundsNum % 2 == 0 ? 1 : 2;
 
-		outfile << "Player" << flag << "第" << flag << "回合出牌：" << "<" << LastCard.CardName << ">" << LastCard.Function << endl;
+        //outfile << "Player" << flag << "第" << flag << "回合出牌：" << "<" << LastCard.CardName << ">" << LastCard.Function << endl;
 		outfile.close();  // 执行完操作后关闭文件句柄
 	}
 }
@@ -124,8 +142,8 @@ void CreatTxt(MagicCard LastCard, int RoundsNum)
 //展示上回合的出牌（已完成）
 void Show_The_last_Card(MagicCard LastCard, int RoundsNum) {
 	int flag = RoundsNum % 2 == 0 ? 1 : 2;
-	cout << "				" << "Player" << flag << "上回合出牌：" << "<" << LastCard.CardName << ">" << LastCard.Function << endl;
-	cout << endl << endl;
+    qDebug() << "				" << "Player" << flag << "上回合出牌：" << "<" << LastCard.CardName << ">" << LastCard.Function << endl;
+    qDebug() << endl << endl;
 	CreatTxt(LastCard, RoundsNum);
 }
 
@@ -148,94 +166,94 @@ void Show_Player_Blood(Player Player1, Player Player2) {
 	int Wmax = P1WLine > P2WLine ? P1WLine : P2WLine;
 	int max = Cmax > Wmax ? Cmax : Wmax;
 	for (int i = max; i > 0; i--) {
-		cout << "   ";
+        qDebug() << "   ";
 		if (i > P1CLine)
-			cout << "     ";
+            qDebug() << "     ";
 		else if (i == P1CLine) {
 			int temp = Player1.PlayerCastle % 5;
 			if (temp == 0)
-				cout << "TTTTT";
+                qDebug() << "TTTTT";
 			else {
 				for (int temp1 = 0; temp1 < temp; temp1++)
-					cout << "T";
+                    qDebug() << "T";
 				for (int temp2 = 0; temp2 < 5 - temp; temp2++)
-					cout << " ";
+                    qDebug() << " ";
 			}
 
 		}
 		else {
-			cout << "TTTTT";
+            qDebug() << "TTTTT";
 		}
-		cout << "   ";
+        qDebug() << "   ";
 		if (i > P1WLine)
-			cout << "     ";
+            qDebug() << "     ";
 		else if (i == P1WLine) {
 			int temp = Player1.PlayerWall % 5;
 			if (temp == 0)
-				cout << "WWWWW";
+                qDebug() << "WWWWW";
 			else {
 				for (int temp1 = 0; temp1 < temp; temp1++)
-					cout << "W";
+                    qDebug() << "W";
 				for (int temp2 = 0; temp2 < 5 - temp; temp2++)
-					cout << " ";
+                    qDebug() << " ";
 			}
 		}
 		else {
-			cout << "WWWWW";
+            qDebug() << "WWWWW";
 		}
 		//打印空格
 		for (int j = 0; j < Line; j++) {
-			cout << " ";
+            qDebug() << " ";
 		}
 		//打印空格
 		if (i > P2WLine)
-			cout << "     ";
+            qDebug() << "     ";
 		else if (i == P2WLine) {
 			int temp = Player2.PlayerWall % 5;
 			if (temp == 0)
-				cout << "WWWWW";
+                qDebug() << "WWWWW";
 			else {
 				for (int temp2 = 0; temp2 < 5 - temp; temp2++)
-					cout << " ";
+                    qDebug() << " ";
 				for (int temp1 = 0; temp1 < temp; temp1++)
-					cout << "W";
+                    qDebug() << "W";
 			}
 		}
 		else {
-			cout << "WWWWW";
+            qDebug() << "WWWWW";
 		}
-		cout << "   ";
+        qDebug() << "   ";
 		if (i > P2CLine)
-			cout << "     ";
+            qDebug() << "     ";
 		else if (i == P2CLine) {
 			int temp = Player2.PlayerCastle % 5;
 			if (temp == 0)
-				cout << "TTTTT";
+                qDebug() << "TTTTT";
 			else {
 				for (int temp2 = 0; temp2 < 5 - temp; temp2++)
-					cout << " ";
+                    qDebug() << " ";
 				for (int temp1 = 0; temp1 < temp; temp1++)
-					cout << "T";
+                    qDebug() << "T";
 			}
 		}
 		else {
-			cout << "TTTTT";
+            qDebug() << "TTTTT";
 		}
 
-		cout << endl;
+        qDebug() << endl;
 	}
-	cout << "   " << Player1.PlayerCastle  << "      " << Player1.PlayerWall;
+    qDebug() << "   " << Player1.PlayerCastle  << "      " << Player1.PlayerWall;
 	//打印空格
 	for (int j = 0; j < Line; j++) {
-		cout << " ";
+        qDebug() << " ";
 	}
-	cout << "     " << Player2.PlayerWall <<"      " << Player2.PlayerCastle << endl;
+    qDebug() << "     " << Player2.PlayerWall <<"      " << Player2.PlayerCastle << endl;
 
 }
 //展示手牌（已完成）
 void Show_Player_Hand(Player ThePlayer) {
 	for (int i = 0; i < ThePlayer.Hand.size(); i++)
-		cout << i + 1 << ":" << "<" << ThePlayer.Hand[i].CardName << ">" << ThePlayer.Hand[i].Function << endl;
+        qDebug() << i + 1 << ":" << "<" << ThePlayer.Hand[i].CardName << ">" << ThePlayer.Hand[i].Function << endl;
 }
 //展示所有的部分(对以上函数的封装)（已完成）
 void Show_All(Player Player1, Player Player2, int RoundsNum, MagicCard LastCard) {
@@ -243,11 +261,11 @@ void Show_All(Player Player1, Player Player2, int RoundsNum, MagicCard LastCard)
 	Show_The_last_Card(LastCard, RoundsNum);
 	Show_Player_Blood(Player1, Player2);
 	if (RoundsNum % 2 == 0) {
-		cout << playername2 << "的手牌：" << endl;
+        qDebug() << playername2 << "的手牌：" << endl;
 		Show_Player_Hand(Player2);
 	}
 	else {
-		cout << playername1 << "的手牌：" << endl;
+        qDebug() << playername1 << "的手牌：" << endl;
 		Show_Player_Hand(Player1);
 	}
 }
@@ -465,15 +483,15 @@ void Drsert_Car(Player &SPlayer, Player &OPlayer, MagicCard TheCard,int  *flag)
 MagicCard SendCard(Player &SPlayer, Player &OPlayer, int RoundsNum) {
 
 	if (RoundsNum % 2 == 0)
-		cout << playername2 << "出牌：请选择您的卡片（输入编号即可），若出牌阶段所出牌不符合出牌条件则视为弃牌" << endl;
+        qDebug() << playername2 << "出牌：请选择您的卡片（输入编号即可），若出牌阶段所出牌不符合出牌条件则视为弃牌" << endl;
 	else
-		cout << playername1 << "出牌：请选择您的卡片（输入编号即可），若出牌阶段所出牌不符合出牌条件则视为弃牌" << endl;
+        qDebug() << playername1 << "出牌：请选择您的卡片（输入编号即可），若出牌阶段所出牌不符合出牌条件则视为弃牌" << endl;
 	int choice;
 	for (;;) {
-		cin >> choice;
+        //cin >> choice;
 		choice--;
 		if (choice<0 || choice>SPlayer.Hand.size())
-			cout << "输入超限，请重新输入" << endl;
+            qDebug() << "输入超限，请重新输入" << endl;
 		else
 			break;
 	}
@@ -498,15 +516,15 @@ MagicCard SendCard(Player &SPlayer, Player &OPlayer, int RoundsNum) {
 //判断胜负操作  布尔类型的函数（在出牌操作后进行）
 bool Is_Win(Player Player1, Player Player2, int R , int winrecouce, int wincastle) {
 	if (R == 60) {
-		cout << "双方已各下30回合，两者皆胜" << endl;
+        qDebug() << "双方已各下30回合，两者皆胜" << endl;
 		return 1;
 	}
 	else if (Player1.PlayerBrick >= winrecouce || Player1.PlayerMonster >= winrecouce || Player1.PlayerJewel >= winrecouce || Player1.PlayerCastle >= wincastle || Player2.PlayerCastle <= 0) {
-		cout << "					Player1 wins!游戏结束！" << endl;
+        qDebug() << "					Player1 wins!游戏结束！" << endl;
 		return 1;
 	}
 	else if (Player2.PlayerBrick >= winrecouce || Player2.PlayerMonster >= winrecouce || Player2.PlayerJewel >= winrecouce || Player2.PlayerCastle >= wincastle || Player1.PlayerCastle <= 0) {
-		cout << "					Player2 wins!游戏结束！" << endl;
+        qDebug() << "					Player2 wins!游戏结束！" << endl;
 		return 1;
 	}
 	else
@@ -518,14 +536,14 @@ void Resource_Update(Player &ThePlayer) {
 	int i;
 	for (i = 0; i <= 4; i++)
 	{
-		cout << endl;
+        qDebug() << endl;
 	}
-	cout << "                新的回合开始，玩家资源更新中……" << endl;//可以让其输出在屏幕中央
+    qDebug() << "                新的回合开始，玩家资源更新中……" << endl;//可以让其输出在屏幕中央
 
 	ThePlayer.PlayerBrick += ThePlayer.BrickOutput;
 	ThePlayer.PlayerMonster += ThePlayer.MonsterOutput;
 	ThePlayer.PlayerJewel += ThePlayer.JewelOutput;
-	Sleep(700);
+    //Sleep(700);
 	system("Cls");
 }
 
@@ -537,82 +555,83 @@ void configure()
 	int i;
 	for (i = 0; i <= 5; i++)
 	{
-		cout << endl;
+        qDebug() << endl;
 	}
-	cout << "                                        游戏参数如下：" << endl;
-	cout << "             " <<" 1:Original_Wall    " << Original_Wall   << "             " << "2:Original_Castle " << Original_Castle<< endl;
-	cout << "             " <<" 3:Original_Monster "<< Original_Monster << "             " << "4:Original_Brick  " << Original_Brick << endl;
-	cout << "             " <<" 5:Original_Jewel   " << Original_Jewel  << "             " << "6:OriginalOutput  " << OriginalOutput << endl;
-	cout << "             " <<" 7:Original_CardNum " << Original_CardNum<< "             " << "8:RoundsSum       " << RoundsSum << endl;
-	cout << "             " <<" 9:winrecouce       " << winrecouce      << "             " << "10:wincastle      " << wincastle << endl;
-	cout << "          先输入修改次数 ,再输入数字进行相对应的改变（例如输入1，1则对Original_wall进行修改），输入0则视为退出" << endl;
-	cin >> j;
+    qDebug() << "                                        游戏参数如下：" << endl;
+    qDebug() << "             " <<" 1:Original_Wall    " << Original_Wall   << "             " << "2:Original_Castle " << Original_Castle<< endl;
+    qDebug() << "             " <<" 3:Original_Monster "<< Original_Monster << "             " << "4:Original_Brick  " << Original_Brick << endl;
+    qDebug() << "             " <<" 5:Original_Jewel   " << Original_Jewel  << "             " << "6:OriginalOutput  " << OriginalOutput << endl;
+    qDebug() << "             " <<" 7:Original_CardNum " << Original_CardNum<< "             " << "8:RoundsSum       " << RoundsSum << endl;
+    qDebug() << "             " <<" 9:winrecouce       " << winrecouce      << "             " << "10:wincastle      " << wincastle << endl;
+    qDebug() << "          先输入修改次数 ,再输入数字进行相对应的改变（例如输入1，1则对Original_wall进行修改），输入0则视为退出" << endl;
+    //cin >> j;
+    j = 1;
 	while (j--)
 	{
-		cin >> n;
+        //cin >> n;
 		if (n == 1)
 		{
-			cout << "                              Original_Wall:      ";
-			cin >> m;
+            qDebug() << "                              Original_Wall:      ";
+            //cin >> m;
 			Original_Wall = m;
 		}
 		if (n == 2)
 		{
-			cout << "                              Original_Castle:    ";
-			cin >> m;
+            qDebug() << "                              Original_Castle:    ";
+            //cin >> m;
 			Original_Castle = m;
 		}
 		if (n == 3)
 		{
-			cout << "                              Original_Monster:   ";
-			cin >> m;
+            qDebug() << "                              Original_Monster:   ";
+            //cin >> m;
 			Original_Monster = m;
 		}
 		if (n == 4)
 		{
-			cout << "                              Original_Brick:     ";
-			cin >> m;
+            qDebug() << "                              Original_Brick:     ";
+            //cin >> m;
 			Original_Brick = m;
 		}if (n == 5)
 		{
-			cout << "                              Original_Jewel:     ";
-			cin >> m;
+            qDebug() << "                              Original_Jewel:     ";
+            //cin >> m;
 			Original_Jewel = m;
 		}
 		if (n == 6)
 		{
-			cout << "                              OriginalOutput:     ";
-			cin >> m;
+            qDebug() << "                              OriginalOutput:     ";
+            //cin >> m;
 			OriginalOutput = m;
 		}
 		if (n == 7)
 		{
-			cout << "                              Original_CardNum:    ";
-			cin >> m;
+            qDebug() << "                              Original_CardNum:    ";
+            //cin >> m;
 			Original_CardNum = m;
 		}
 		if (n == 8)
 		{
-			cout << "                                RoundsSum:         ";
-			cin >> m;
+            qDebug() << "                                RoundsSum:         ";
+            //cin >> m;
 			RoundsSum = m;
 		}
 		if (n == 9)
 		{
-			cout << "                                winrecouce:         ";
-			cin >> m;
+            qDebug() << "                                winrecouce:         ";
+            //cin >> m;
 			winrecouce = m;
 		}
 		if (n == 10)
 		{
-			cout << "                                wincastle：         ";
-			cin >> m;
+            qDebug() << "                                wincastle：         ";
+            //cin >> m;
 			wincastle = m;
 		}
 	}
 
-
-	ofstream outfile("..\\txt\\configure.txt", ios::app);
+/*
+    ofstream outfile("configure.txt", ios::app);
 
 	if (outfile) {
 		outfile << "                                 游戏参数如下：" << endl;
@@ -623,6 +642,7 @@ void configure()
 		outfile << "             " << " 9:winrecouce       = " << winrecouce       << "             " << "10:wincastle      = " << wincastle << endl;
 		outfile.close();
 	}
+    */
 }
 
 
@@ -633,14 +653,14 @@ void Inputname()
 	int i;
 	for (i = 0; i <= 4; i++)
 	{
-		cout << endl;
+        qDebug() << endl;
 
 	}
-	cout << "请输入玩家1的姓名：" << endl;
-	cin.ignore();
-	cin.getline(playername1, 100);
-	cout << "请输入玩家2的姓名：" << endl;
-	cin.getline(playername2, 100);
+    qDebug() << "请输入玩家1的姓名：" << endl;
+    //cin.ignore();
+    //cin.getline(playername1, 100);
+    qDebug() << "请输入玩家2的姓名：" << endl;
+    //cin.getline(playername2, 100);
 }
 
 
@@ -650,53 +670,53 @@ void Startgame()
 	int i, n;
 	for (i = 0; i <= 4; i++)
 	{
-		cout << endl;
+        qDebug() << endl;
 	}
-	cout << "                            ***********************" << endl;
-	Sleep(500);
-	cout << "                             **                 **" << endl;
-	Sleep(500);
-	cout << "                              **               **" << endl;
-	Sleep(500);
-	cout << "                               **             **" << endl;
-	Sleep(500);
-	cout << "                                 **          **" << endl;
-	Sleep(500);
-	cout << "                                  **        **" << endl;
-	Sleep(500);
-	cout << "                                    **    **" << endl;
-	Sleep(500);
-	cout << "                                      **** " << endl;
-	Sleep(500);
-	cout << "                                    **    **" << endl;
-	Sleep(500);
-	cout << "                                  **        **" << endl;
-	Sleep(500);
-	cout << "                                 **          **" << endl;
-	Sleep(500);
-	cout << "                               **             **" << endl;
-	Sleep(500);
-	cout << "                              **               **" << endl;
-	Sleep(500);
-	cout << "                             **                 **" << endl;
-	Sleep(500);
-	cout << "                            ***********************" << endl;
-	Sleep(500);
-	cout << "                                ~欢迎来到魔幻牌~                   " << endl;
-	Sleep(500);
-	cout << "                           请输入1或2进入相对应的模式  " << endl;
-	Sleep(500);
-	cout << "                                 1:进入玩家对战                " << endl;
-	Sleep(500);
-	cout << "                                 2:人机对战" << endl;
-	Sleep(500);
-	cout << "                               您选择的模式是：";
-	Sleep(500);
-	cin >> n;
+    qDebug() << "                            ***********************" << endl;
+    //Sleep(500);
+    qDebug() << "                             **                 **" << endl;
+    //Sleep(500);
+    qDebug() << "                              **               **" << endl;
+    //Sleep(500);
+    qDebug() << "                               **             **" << endl;
+    //Sleep(500);
+    qDebug() << "                                 **          **" << endl;
+    //Sleep(500);
+    qDebug() << "                                  **        **" << endl;
+    //Sleep(500);
+    qDebug() << "                                    **    **" << endl;
+    //Sleep(500);
+    qDebug() << "                                      **** " << endl;
+    //Sleep(500);
+    qDebug() << "                                    **    **" << endl;
+    //Sleep(500);
+    qDebug() << "                                  **        **" << endl;
+    //Sleep(500);
+    qDebug() << "                                 **          **" << endl;
+    //Sleep(500);
+    qDebug() << "                               **             **" << endl;
+    //Sleep(500);
+    qDebug() << "                              **               **" << endl;
+    //Sleep(500);
+    qDebug() << "                             **                 **" << endl;
+    //Sleep(500);
+    qDebug() << "                            ***********************" << endl;
+    //Sleep(500);
+    qDebug() << "                                ~欢迎来到魔幻牌~                   " << endl;
+    //Sleep(500);
+    qDebug() << "                           请输入1或2进入相对应的模式  " << endl;
+    //Sleep(500);
+    qDebug() << "                                 1:进入玩家对战                " << endl;
+    //Sleep(500);
+    qDebug() << "                                 2:人机对战" << endl;
+    //Sleep(500);
+    qDebug() << "                               您选择的模式是：";
+    //Sleep(500);
+    //cin >> n;
+    n = 1;//debug
 	if (n == 1)
 	{
 		Inputname();
-		configure();
 		
 	}
 	//人机对战在实现
@@ -718,9 +738,26 @@ int main() {
 	srand((unsigned)time(NULL));
 	Player p1, p2;
 	Initialization(p1, p2);
-	MagicCard EmptyCard = { "无",0,0,0,0,0,0,0,0,0,0,0,0,0,0,"无" };//初始化一张空牌
-	Show_All(p1, p2, RoundsNum, EmptyCard);//展示桌面
-	Sleep(1000);
+    MagicCard EmptyCard;// = { "无",0,0,0,0,0,0,0,0,0,0,0,0,0,0,"无" };//初始化一张空牌
+    EmptyCard.Attack = 0;
+    EmptyCard.CardName = "无";
+    EmptyCard.Function = "无";
+    EmptyCard.Is_PlayAgain = 0;
+    EmptyCard.IS_Special = 0;
+    EmptyCard.M_Brick = 0;
+    EmptyCard.M_Castle = 0;
+    EmptyCard.M_Jewel = 0;
+    EmptyCard.M_Monster = 0;
+    EmptyCard.M_Wall = 0;
+    EmptyCard.O_Brick = 0;
+    EmptyCard.O_Castle = 0;
+    EmptyCard.O_Jewel = 0;
+    EmptyCard.O_Monster = 0;
+    EmptyCard.O_Wall = 0;
+    EmptyCard.SpecialNumber = 0;
+
+    Show_All(p1, p2, RoundsNum, EmptyCard);//展示桌面
+    //Sleep(1000);
 	Resource_Update(p1);//玩家一资源更新
 	Show_All(p1, p2, RoundsNum, EmptyCard);//展示桌面
 	for (;;) {

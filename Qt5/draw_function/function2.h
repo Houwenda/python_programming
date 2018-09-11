@@ -24,6 +24,19 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
 private:
+    QString expression1;
+    QString expression2;
+    QString line_color;
+    QString line_type;
+public:
+    void get_expression(QString str1, QString str2,QString color, QString type);
+    QString read_expression1(void);
+    QString read_expression2(void);
+    QString read_line_color(void);
+    QString read_line_type(void);
+    bool check_input(QString str1, QString str2);
+    QString replace_t(QString str, double n);
+    double calculate_function(int n, double x);
 };
 
 #endif // FUNCTION2_H

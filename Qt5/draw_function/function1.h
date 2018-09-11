@@ -1,6 +1,6 @@
-#ifndef FUNCTION1_H
+#ifndef FUNCTION1_Htr
 #define FUNCTION1_H
-
+#include <QString>
 #include <QAbstractItemModel>
 
 class function1 : public QAbstractItemModel
@@ -24,6 +24,18 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
 private:
+    QString expression;
+    QString line_color;
+    QString line_type;
+public:
+    void get_expression(QString str, QString color, QString type);
+    QString read_expression(void);
+    QString read_line_color(void);
+    QString read_line_type(void);
+    //检查合法输入
+    bool check_input(QString str);
+    QString replace_x(QString str, double n);
+    double calculate_function(double x);
 };
 
 #endif // FUNCTION1_H

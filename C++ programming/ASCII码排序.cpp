@@ -107,7 +107,7 @@ int main(){
 	else if(flag[1]==0)  cout<<y<<' ';
 	else  cout<<z<<' ';
 	
-	cout<<c1;
+	cout<<c1<<endl;
 	}
 	
 	return 0;
