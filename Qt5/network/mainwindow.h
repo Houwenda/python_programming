@@ -21,6 +21,7 @@ private slots:
     void replyFinished(QNetworkReply *reply);
 private:
     Ui::MainWindow *ui;
+    bool writeQuipquip(QString str);
 };
 
 #endif // MAINWINDOW_H
