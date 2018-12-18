@@ -1,3 +1,4 @@
+/*
 using namespace std;
 #include <iostream>
 
@@ -49,6 +50,40 @@ int main(){
 		cout<<"o:"<<count[i][3]<<endl;
 		cout<<"u:"<<count[i][4]<<endl;
 		
+	}
+	
+	return 0;
+}
+*/ 
+using namespace std;
+#include <iostream>
+#include <cstring>
+int main(){
+	
+	char str[100];
+	int count[5];
+	int n;
+	cin>>n;
+	cin.ignore();
+	int i=0;
+	while(i<n){
+		cin.getline(str,100);
+		for(int j=0;j<5;j++) count[j] = 0;
+		for(int j=0;j<strlen(str);j++){
+			if(str[j]=='a') count[0]++;
+			else if(str[j]=='e') count[1]++;
+			else if(str[j]=='i') count[2]++;
+			else if(str[j]=='o') count[3]++;
+			else if(str[j]=='u') count[4]++;
+		}
+		cout<<"a:"<<count[0]<<endl;
+		cout<<"e:"<<count[1]<<endl;
+		cout<<"i:"<<count[2]<<endl;
+		cout<<"o:"<<count[3]<<endl;
+		cout<<"u:"<<count[4]<<endl;
+		if(i!=n-1) cout<<endl;	
+
+		i++;
 	}
 	
 	return 0;

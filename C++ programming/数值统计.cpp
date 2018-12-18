@@ -1,3 +1,4 @@
+/*
 using namespace std;
 #include <iostream>
 
@@ -30,5 +31,27 @@ int main(){
 	}
 	
 	
+	return 0;
+}
+*/ 
+using namespace std;
+#include <iostream>
+
+int main(){
+	int n;
+	double num[100];
+	while(cin>>n){
+		if(n<=0) return 0;
+		int a=0;
+		int b=0;
+		int c=0;
+		for(int i=0;i<n;i++) cin>>num[i];
+		for(int i=0;i<n;i++){
+			if(num[i]<0) a++;
+			else if(num[i]==0) b++;
+			else if(num[i]>0) c++;
+		}
+		cout<<a<<' '<<b<<' '<<c<<endl;
+	}
 	return 0;
 }

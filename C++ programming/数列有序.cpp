@@ -1,3 +1,4 @@
+/*
 using namespace std;
 #include <iostream>
 
@@ -41,5 +42,32 @@ int main(){
 		}
 	}
 
+	return 0;
+}
+*/ 
+using namespace std;
+#include <iostream>
+
+int main(){
+	
+	int m,n;
+	int num[100];
+	while(cin>>n>>m){
+		if(m==0&&n==0) return 0;
+		for(int i=0;i<n;i++) cin>>num[i];
+		bool flag = 0;
+		for(int i=0;i<n-1;i++){
+			if(m<num[i]&&flag==0){
+				cout<<m<<' '<<num[i]<<' ';
+				flag = 1;
+			} 
+			else cout<<num[i]<<' ';
+		}
+		if(flag==0){
+			if(m<num[n-1]) cout<<m<<' '<<num[n-1]<<endl;
+			else cout<<num[n-1]<<' '<<m<<endl;
+		}
+		else cout<<num[n-1]<<endl;
+	}
 	return 0;
 }

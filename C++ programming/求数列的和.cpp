@@ -18,15 +18,11 @@ int main(){
 				j++;
 			} 
 			result += k;
-			
-			
+		
 			i++;
 		}
 		
-		cout<<fixed<<setprecision(2)<<result<<endl;
-		
-		
-		
+		cout<<fixed<<setprecision(2)<<result<<endl;	
 	}
 	
 	return 0;

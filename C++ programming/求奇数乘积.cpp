@@ -1,3 +1,4 @@
+/* 
 using namespace std;
 #include <iostream>
 
@@ -24,3 +25,23 @@ int main(){
 		
 	return 0;
 } 
+*/
+using namespace std;
+#include <iostream>
+
+int main(){
+	
+	int n;
+	int num[100];
+	while(cin>>n){
+		for(int i=0;i<n;i++) cin>>num[i];
+		int result = 1;
+		for(int i=0;i<n;i++){
+			if(num[i]%2==1) result *= num[i];
+		}
+		cout<<result<<endl;
+	}
+	
+
+	return 0;
+}

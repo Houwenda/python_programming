@@ -80,7 +80,7 @@
 //	
 //	return 0;
 //}
-
+/*
 using namespace std;
 #include <iostream>
 
@@ -112,4 +112,16 @@ int main(){
 	
 	return 0;
 } 
+*/
+using namespace std;
+#include <iostream>
+#include <algorithm>
 
+int main(){
+	char letter[3];
+	while(cin>>letter[0]>>letter[1]>>letter[2]){
+		sort(letter,letter+3,less<char>());
+		cout<<letter[0]<<' '<<letter[1]<<' '<<letter[2]<<endl;
+	}
+	return 0;
+}

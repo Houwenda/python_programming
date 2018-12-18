@@ -1,56 +1,79 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>ECharts</title>
-    <!-- 引入 echarts.js -->
-    <script src="echarts.js"></script>
-</head>
-<body>
-    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-    <div id="main" style="width: 600px;height:600px;"></div>
-    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-    <script type="text/javascript" >
-    // 基于准备好的dom，初始化echarts实例
+<script src="jquery.min.js"></script>
 
-    var myChart = echarts.init(document.getElementById('main'));
-    myChart.showLoading();
-    $.getJSON('./webkit-dep.json', function (webkitDep) {
-    myChart.hideLoading();
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 80%; margin: 0">
+       <div id="container" style="height: 100%;width: 100%"></div>
+       <script src="echarts.js"></script>
+       <script type="text/javascript">
 
-    option = {
-        legend: {
-            data: ['HTMLElement', 'WebGL', 'SVG', 'CSS', 'Other']
-        },
-        series: [{
-            type: 'graph',
-            layout: 'force',
-            animation: false,
-            label: {
-                normal: {
-                    position: 'right',
-                    formatter: '{b}'
-                }
-            },
-            draggable: true,
-            data: webkitDep.nodes.map(function (node, idx) {
-                node.id = idx;
-                return node;
-            }),
-            categories: webkitDep.categories,
-            force: {
-                // initLayout: 'circular'
-                // repulsion: 20,
-                edgeLength: 5,
-                repulsion: 20,
-                gravity: 0.2
-            },
-            edges: webkitDep.links
-        }]
-    };
-
-    myChart.setOption(option);
+$(function(){
+showcharts();
+setInterval(function(){
+showcharts();
+}, 3000);
 });
-    </script>
-</body>
+
+
+function showcharts(){
+  var dom = document.getElementById("container");
+  var myChart = echarts.init(dom,'dark');
+  var app = {};
+  option = null;
+  // myChart.showLoading();
+  myChart.hideLoading();
+  $.getJSON('testEcharts.json', function (webkitDep) {
+      myChart.hideLoading();
+
+      option = {
+          legend: {
+              data: ['source', 'Ceasar Cipher', 'Base64', 'Base32', 'Base16','md5','sha1','sha244','sha256','sha384','sha512','UrlEncode','Unicode','XXencode','UUencode','Atbash','Jsfuck','Brainfuck','Polybius','Fence cipher']
+          },
+          series: [{
+              type: 'graph',
+              layout: 'force',
+              animation: false,
+              label: {
+                  normal: {
+                      position: 'right',
+                      formatter: '{b}'
+                  }
+              },
+              draggable: true,
+              data: webkitDep.nodes.map(function (node, idx) {
+                  node.id = idx;
+                  return node;
+              }),
+              categories: webkitDep.categories,
+              force: {
+                  // initLayout: 'circular'
+                  // repulsion: 20,
+                  edgeLength: 5,
+                  repulsion: 20,
+                  gravity: 0.2
+              },
+              edges: webkitDep.links
+          }]
+      };
+
+      myChart.setOption(option);
+  });;
+  if (option && typeof option === "object") {
+      myChart.setOption(option, true);
+  }
+
+}
+
+
+
+
+
+
+
+
+       </script>
+   </body>
 </html>

@@ -93,6 +93,7 @@
 //	
 //	return 0;
 //}
+/* 
 using namespace std;
 #include <iostream>
 
@@ -154,7 +155,7 @@ int count_day(char *date){
 int main(){
 	
 	char date[11];
-	
+
 	while(cin>>date){
 		
 		cout<<count_day(date)<<endl;
@@ -164,3 +165,32 @@ int main(){
 	
 	return 0;
 } 
+*/
+using namespace std;
+#include <iostream>
+bool judge_year(int year){
+	if(year%100==0){
+		if(year%400==0) return true;
+		else return false;
+	}
+	else if(year%4==0) return true;
+	else return false;
+}
+
+int main(){
+	
+	int year,month,day;
+	char slash;
+	int mon[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+	while(cin>>year>>slash>>month>>slash>>day){
+		int count = 0;
+		for(int i=0;i<month-1;i++) count += mon[i];
+		count += day;
+		if(month>2&&judge_year(year)){
+			count += 1;
+		}
+		cout<<count<<endl;
+	}
+	
+	return 0;
+}

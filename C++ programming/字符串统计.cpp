@@ -12,7 +12,7 @@ int main(){
 			
 				cin>>x;
 				j = 0;
-				while(j<x.size()){
+				while(j<x.length()){
 					
 					if(x[j]>='0'&&x[j]<='9'){
 					result[i] += 1;	
@@ -23,14 +23,12 @@ int main(){
 			i++;
 		}
 				
-	
 	i = 0;
 	while(i<n){
 			
 		cout<<result[i]<<endl;
 		i++;
 	}
-	
 	
 	return 0;
 }

@@ -31,8 +31,8 @@ int main(){
 	double r,v;
 	while(cin>>r){		
 		v = (4.0000000/3)*PI*r*r*r;
-//		cout<<fixed<<setprecision(3)<<v<<endl;
-		printf("%.3lf\n",v);
+		cout<<fixed<<setprecision(3)<<v<<endl;
+		//printf("%.3lf\n",v);
 	}
 	
 	

@@ -1,3 +1,4 @@
+/* 
 using namespace std;
 #include <iostream>
 #include <cstring>
@@ -57,6 +58,36 @@ int main(){
 		
 		
 	}
+	
+	
+	return 0;
+}
+*/
+using namespace std;
+#include <iostream>
+#include <cstring>
+int main(){
+	
+	int n;
+	cin>>n;
+	cin.ignore();
+	char str[50];
+	int i=0;
+	while(i<n){
+		cin.getline(str,50);
+		bool flag = true;
+		if((str[0]>='a'&&str[0]<='z')||(str[0]>='A'&&str[0]<='Z')||str[0]=='_'){
+		}
+		else flag = false;
+		for(int j=0;j<strlen(str);j++){
+			if((str[j]>='0'&&str[j]<='9')||(str[j]>='a'&&str[j]<='z')||(str[j]>='A'&&str[j]<='Z')||str[j]=='_'){
+			}
+			else flag = false;
+		}	
+		if(flag) cout<<"yes"<<endl;
+		else cout<<"no"<<endl;
+		i++;
+	} 
 	
 	
 	return 0;

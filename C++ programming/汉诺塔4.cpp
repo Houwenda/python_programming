@@ -1,3 +1,4 @@
+/* 
 using namespace std;
 #include <iostream>
 
@@ -26,3 +27,46 @@ int main(){
 	}
 	return 0;
 }
+*/
+/* 
+using namespace std;
+#include <iostream>
+#include <cmath>
+
+int main(){
+	int t;
+	while(cin>>t){
+		int i = 0;
+		int n;
+		while(i<t){
+			cin>>n;
+			int count = 2;
+			for(int j=2;j<n;j++) count = count*3 + 2;
+			if(n==1) count = 0;
+			cout<<(count+2)<<endl;
+			i++;
+		}
+	}
+	return 0;
+}
+*/
+using namespace std;
+#include <iostream>
+
+int main(){
+	int t;
+	while(cin>>t){
+		int i = 0;
+		int n;
+		while(i<t){
+			cin>>n;
+			int count = 2;
+			for(int j=2;j<n;j++) count = 3 * count + 2;
+			if(n==1) count = 0;
+			cout<<count+2<<endl;
+			i++;
+		}
+	}
+	return 0;
+}
+

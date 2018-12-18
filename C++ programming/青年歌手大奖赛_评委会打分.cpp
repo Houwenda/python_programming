@@ -35,8 +35,6 @@ int main(){
 		cout<<fixed<<setprecision(2)<<(sum/(n-2))<<endl;
 		
 	}
-	
-	
-	
+
 	return 0;
 }

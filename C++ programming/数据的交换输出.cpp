@@ -36,7 +36,5 @@ int main(){
 		}
 		cout<<num[i]<<endl;
 	}
-	
-	
 	return 0;
 }

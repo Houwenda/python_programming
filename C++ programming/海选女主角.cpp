@@ -1,3 +1,4 @@
+/*
 using namespace std;
 #include <iostream>
 
@@ -62,3 +63,36 @@ int main(){
 	
 	return 0;
 } 
+*/ 
+using namespace std;
+#include <iostream>
+
+int main(){
+	
+	long score[1005],score1[1005];
+	long tmp,max_score;
+	int m,n;
+	while(cin>>m>>n){
+		for(int i=0;i<m*n;i++){
+			cin>>score[i];
+		}
+		for(int i=0;i<m*n;i++){
+			if(score[i]>0)	score1[i] = score[i];
+			else score1[i] = -score[i];
+		} 
+		max_score = 0;
+		for(int i=0;i<m*n;i++){
+			if(score1[i]>max_score) max_score = score1[i];
+		}
+		int i = 0;
+		for(i=0;i<m*n;i++){
+			if(max_score == score1[i]){
+				break;
+			}
+		}
+		if((i+1)%n==0) cout<<(i+1)/n<<' '<<n<<' '<<score[i]<<endl;
+		else cout<<(i+1)/n+1<<' '<<(i+1)%n<<' '<<score[i]<<endl;
+	}
+	
+	return 0;
+}

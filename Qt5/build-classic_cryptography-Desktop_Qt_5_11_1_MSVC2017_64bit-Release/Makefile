@@ -236,6 +236,7 @@ Makefile: ..\classic_cryptography\classic_cryptography.pro D:\Qt5\5.11.1\msvc201
 		D:\Qt5\5.11.1\msvc2017_64\mkspecs\features\qt_config.prf \
 		D:\Qt5\5.11.1\msvc2017_64\mkspecs\win32-msvc\qmake.conf \
 		D:\Qt5\5.11.1\msvc2017_64\mkspecs\features\spec_post.prf \
+		.qmake.stash \
 		D:\Qt5\5.11.1\msvc2017_64\mkspecs\features\exclusive_builds.prf \
 		D:\Qt5\5.11.1\msvc2017_64\mkspecs\common\msvc-version.conf \
 		D:\Qt5\5.11.1\msvc2017_64\mkspecs\features\toolchain.prf \
@@ -271,6 +272,7 @@ Makefile: ..\classic_cryptography\classic_cryptography.pro D:\Qt5\5.11.1\msvc201
 		D:\Qt5\5.11.1\msvc2017_64\lib\Qt5Qml.prl \
 		D:\Qt5\5.11.1\msvc2017_64\lib\Qt5Network.prl \
 		D:\Qt5\5.11.1\msvc2017_64\lib\Qt5Positioning.prl \
+		D:\Qt5\5.11.1\msvc2017_64\lib\Qt5Sql.prl \
 		D:\Qt5\5.11.1\msvc2017_64\lib\Qt5Core.prl
 	$(QMAKE) -o Makefile ..\classic_cryptography\classic_cryptography.pro -spec win32-msvc "CONFIG+=qtquickcompiler"
 D:\Qt5\5.11.1\msvc2017_64\mkspecs\features\spec_pre.prf:
@@ -434,6 +436,7 @@ D:\Qt5\5.11.1\msvc2017_64\mkspecs\features\qt_functions.prf:
 D:\Qt5\5.11.1\msvc2017_64\mkspecs\features\qt_config.prf:
 D:\Qt5\5.11.1\msvc2017_64\mkspecs\win32-msvc\qmake.conf:
 D:\Qt5\5.11.1\msvc2017_64\mkspecs\features\spec_post.prf:
+.qmake.stash:
 D:\Qt5\5.11.1\msvc2017_64\mkspecs\features\exclusive_builds.prf:
 D:\Qt5\5.11.1\msvc2017_64\mkspecs\common\msvc-version.conf:
 D:\Qt5\5.11.1\msvc2017_64\mkspecs\features\toolchain.prf:
@@ -469,6 +472,7 @@ D:\Qt5\5.11.1\msvc2017_64\lib\Qt5WebChannel.prl:
 D:\Qt5\5.11.1\msvc2017_64\lib\Qt5Qml.prl:
 D:\Qt5\5.11.1\msvc2017_64\lib\Qt5Network.prl:
 D:\Qt5\5.11.1\msvc2017_64\lib\Qt5Positioning.prl:
+D:\Qt5\5.11.1\msvc2017_64\lib\Qt5Sql.prl:
 D:\Qt5\5.11.1\msvc2017_64\lib\Qt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ..\classic_cryptography\classic_cryptography.pro -spec win32-msvc "CONFIG+=qtquickcompiler"
