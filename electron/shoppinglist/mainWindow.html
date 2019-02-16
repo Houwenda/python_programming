@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <title>ShoppingList</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    </head>
+    <body>
+        <nav>
+            <div class="nav-wrapper">
+                <a class="brand-logo center">ShoppingList</a>
+            </div>
+        </nav>
+        <ul></ul>
+        <script type="text/javascript">
+                const electron = require('electron');
+                const {ipcRenderer} = electron;
+                const ul = document.querySelector('ul');  //创建一个列表
+                
+                // Add item 
+                ipcRenderer.on('item:add', function(e, item){
+                    ul.className = 'collection';  //动态设置ul的class，提前加的话ul为空时会有一条横线
+                    const li = document.createElement('li');  //创建一个项目
+                    li.className = 'collection-item';
+                    const itemText = document.createTextNode(item);  //将item转化为text
+                    li.appendChild(itemText);  //将文本添加到项目中
+                    ul.appendChild(li);  //将项目添加到列表中
+                });
+                
+                // Clear items
+                ipcRenderer.on('item:clear', function(){
+                    ul.innerHTML = '';
+                });
+                
+                // Remove item 
+                ul.addEventListener('dblclick', removeItem);
+                
+                function removeItem(e){
+                    e.target.remove();
+                    if(ul.children.length == 0){  //当ul为空时去掉class，否则会有一条横线
+                        ul.className = '';
+                    }
+                }
+        </script>
+    </body>
+</html>

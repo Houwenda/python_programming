@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <title>Add Shopping List Item</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <form>
+                <div>
+                    <label>Enter Item</label>
+                    <input type="text" id='item' autofocus>
+                </div>
+                <button type="submit" class="btn waves-effect waves-light">Add Item</button>
+            </form>
+        </div>
+        
+        <script type="text/javascript">
+            const electron = require('electron');
+            const {ipcRenderer} = electron;  //将获取的数据(item)发送到main.js
+            
+            const form = document.querySelector('form');
+            form.addEventListener('submit', submitForm);  //监听到submit按键被按下时，调用submitForm函数
+            
+            function submitForm(e){
+                e.preventDefault();
+                const item = document.querySelector('#item').value;  //获取输入值
+                ipcRenderer.send('item:add', item);
+            }
+        </script>
+    </body>
+</html>
