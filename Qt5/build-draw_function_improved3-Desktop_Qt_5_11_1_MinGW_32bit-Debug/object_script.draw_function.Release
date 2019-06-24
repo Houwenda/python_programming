@@ -1,0 +1,15 @@
+INPUT(
+./release/main.o
+./release/mainwindow.o
+./release/qcustomplot.o
+./release/dialogaddfuntion.o
+./release/dialogdraw.o
+./release/function1.o
+./release/function2.o
+./release/analyse_function.o
+./release/calculate_debug.o
+./release/moc_mainwindow.o
+./release/moc_qcustomplot.o
+./release/moc_dialogaddfuntion.o
+./release/moc_dialogdraw.o
+);

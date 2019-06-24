@@ -1,0 +1,15 @@
+INPUT(
+./debug/main.o
+./debug/mainwindow.o
+./debug/qcustomplot.o
+./debug/dialogaddfuntion.o
+./debug/dialogdraw.o
+./debug/function1.o
+./debug/function2.o
+./debug/analyse_function.o
+./debug/calculate_debug.o
+./debug/moc_mainwindow.o
+./debug/moc_qcustomplot.o
+./debug/moc_dialogaddfuntion.o
+./debug/moc_dialogdraw.o
+);
